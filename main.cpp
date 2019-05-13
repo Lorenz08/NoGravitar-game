@@ -1,5 +1,6 @@
 #include <iostream>
 #include <conio.h>
+#include <Windows.h>
 #include "SolarSystem.h"
 #include "Mapp.h"
 #include "PlanetSurface.h"
@@ -12,16 +13,16 @@ int main() {
 	Mapp mapp = Mapp();
 	bool planetEnter = false;
 	int numeroSS = 1;
-	char k = ' ';
+	char k = '2';
 
 	mapp.printMapp(1);
-	while (k != 'y') k = _getch();
-	while (nav_SS.returnParameter(10) >= 1) {
+	while (k != ' ') k = _getch();
+	while (nav_SS.spaceshipIsAlive()) {
 		if (x.returnIfDestroyed()) x.addSolarSystem(nav_SS);
 		x.setMappUniverso();
 		x.printMapp();
 		char n = x.interationSpaceship(planetEnter, numeroSS);
-		while (planetEnter && nav_SS.returnParameter(10) >= 1) {
+		while ((planetEnter) && (nav_SS.spaceshipIsAlive())) {
 			x.pianetaCor(n)->printMapp();
 			char m = x.pianetaCor(n)->interationSpaceshipPlanetSurface(nav_SS);
 			x.pianetaCor(n)->setMappPlanetSurface(nav_SS, m, planetEnter);

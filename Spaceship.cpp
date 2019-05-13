@@ -62,6 +62,11 @@ void Spaceship::fuelPlus(int i) {
 	else if (i == 1) fuel = fuel + 100;
 }
 
+bool Spaceship::spaceshipIsAlive() {
+	if ((fuel >= 1) && (life >= 1)) return true;
+	else return false;
+}
+
 
 
 /*void Spaceship::moveSpaceshipPlanet(char m) {

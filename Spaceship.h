@@ -19,6 +19,7 @@ public:
 	void lifeMinus();
 	void setInitialPosition();
 	void fuelPlus(int i);
+	bool spaceshipIsAlive();
 	
 	
 	
