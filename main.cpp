@@ -19,13 +19,13 @@ int main() {
 	while (k != ' ') k = _getch();
 	while (nav_SS.spaceshipIsAlive()) {
 		if (x.returnIfDestroyed()) x.addSolarSystem(nav_SS);
-		x.setMappUniverso();
+		x.setMappUniverso(nav_SS);
 		x.printMapp();
-		char n = x.interationSpaceship(planetEnter, numeroSS);
+		char n = x.interationSpaceship(nav_SS, planetEnter, numeroSS);
 		while ((planetEnter) && (nav_SS.spaceshipIsAlive())) {
-			x.pianetaCor(n)->printMapp();
-			char m = x.pianetaCor(n)->interationSpaceshipPlanetSurface(nav_SS);
-			x.pianetaCor(n)->setMappPlanetSurface(nav_SS, m, planetEnter);
+			x.pianetaCor(nav_SS, n)->printMapp();
+			char m = x.pianetaCor(nav_SS, n)->interationSpaceshipPlanetSurface(nav_SS);
+			x.pianetaCor(nav_SS, n)->setMappPlanetSurface(nav_SS, m, planetEnter);
 			nav_SS.fuelMinus();
 		}
 		x.solarSystemChange(numeroSS);

@@ -9,6 +9,34 @@ Mapp::Mapp(){
 }
 
 
+void Mapp::printMapp(int i) {
+	if (i == 1) setInitialMapp();
+	else if (i == 2) setFinalMapp();
+	system("cls");
+	ShowConsoleCursor(false);
+	const int WIDTH = 101;
+	const int HEIGHT = 21;
+	SMALL_RECT windowSize = { 0, 0, WIDTH - 1, HEIGHT - 1 };
+	COORD bufferSize = { WIDTH , HEIGHT };
+	COORD characterBufferSize = { WIDTH , HEIGHT };
+	COORD characterPosition = { 0, 0 };
+	SMALL_RECT consoleWriteArea = { 0, 0, WIDTH - 1, HEIGHT - 1 };
+	CHAR_INFO consoleBuffer[WIDTH * HEIGHT];
+	HANDLE wHnd = GetStdHandle(STD_OUTPUT_HANDLE);
+	HANDLE rHnd = GetStdHandle(STD_INPUT_HANDLE);
+	SetConsoleWindowInfo(wHnd, TRUE, &windowSize);
+	SetConsoleScreenBufferSize(wHnd, bufferSize);
+	for (int y = 0; y < HEIGHT; ++y) {
+		for (int x = 0; x < WIDTH; ++x) {
+			consoleBuffer[x + WIDTH * y].Char.AsciiChar = (unsigned char)matrice[x][y];
+			consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN;
+		}
+	}
+	WriteConsoleOutputA(wHnd, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea);
+	Sleep(150);
+}
+
+
 void Mapp::setMapp() {
 	for (int y = 0; y <= yMatrice; y++) {
 		for (int x = 0; x <= xMatrice; x++) {
@@ -30,41 +58,6 @@ void Mapp::setMapp() {
 	matrice[100][7] = 185;
 	matrice[78][0] = 203;
 	matrice[78][20] = 202;
-}
-
-void Mapp::ShowConsoleCursor(bool showFlag){  //funzione per non fare vedere il cursore
-	HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
-	CONSOLE_CURSOR_INFO     cursorInfo;
-	GetConsoleCursorInfo(out, &cursorInfo);
-	cursorInfo.bVisible = showFlag;
-	SetConsoleCursorInfo(out, &cursorInfo);
-}
-
-void Mapp::printMapp(int i) {
-	if (i == 1) setInitialMapp();
-	else if (i == 2) setFinalMapp();
-	system("cls");
-	ShowConsoleCursor(false);
-	const int WIDTH = 101;
-	const int HEIGHT = 21;
-	SMALL_RECT windowSize = { 0, 0, WIDTH - 1, HEIGHT - 1 };
-	COORD bufferSize = { WIDTH , HEIGHT };
-	COORD characterBufferSize = { WIDTH , HEIGHT };
-	COORD characterPosition = { 0, 0 };
-	SMALL_RECT consoleWriteArea = { 0, 0, WIDTH - 1, HEIGHT - 1 };
-	CHAR_INFO consoleBuffer[WIDTH * HEIGHT];
-	HANDLE wHnd = GetStdHandle(STD_OUTPUT_HANDLE);
-	HANDLE rHnd = GetStdHandle(STD_INPUT_HANDLE);
-	SetConsoleWindowInfo(wHnd, TRUE, &windowSize);
-	SetConsoleScreenBufferSize(wHnd, bufferSize);
-	for (int y = 0; y < HEIGHT; ++y) {
-		for (int x = 0; x < WIDTH; ++x) {
-			consoleBuffer[x + WIDTH * y].Char.AsciiChar = (unsigned char) matrice[x][y];
-			consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN;
-		}
-	}
-	WriteConsoleOutputA(wHnd, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea);
-	Sleep(150);
 }
 
 
@@ -144,6 +137,22 @@ void Mapp::setGeneralParameters(int fuel, int life) {
 }
 
 
+void Mapp::setSolarSystemParameters(int fuel, int life, int universo) {
+	setGeneralParameters(fuel, life);
+
+	matrice[79][5] = 'S';
+	matrice[80][5] = '.';
+	matrice[81][5] = 'S';
+	matrice[82][5] = 'O';
+	matrice[83][5] = 'L';
+	matrice[84][5] = 'A';
+	matrice[85][5] = 'R';
+	matrice[86][5] = 'E';
+	matrice[87][5] = ':';
+	matrice[88][5] = (char)universo + 48;
+}
+
+
 void Mapp::setPlanetSurfaceParameters(int fuel, int life) {
 	setGeneralParameters(fuel, life); 
 
@@ -197,22 +206,6 @@ void Mapp::setPlanetSurfaceParameters(int fuel, int life) {
 	matrice[89][10] = 'A';
 	matrice[90][10] = 'R';
 	matrice[91][10] = 'E';
-}
-
-
-void Mapp::setSolarSystemParameters(int fuel, int life, int universo) {
-	setGeneralParameters(fuel, life);
-
-	matrice[79][5] = 'S';
-	matrice[80][5] = '.';
-	matrice[81][5] = 'S';
-	matrice[82][5] = 'O';
-	matrice[83][5] = 'L';
-	matrice[84][5] = 'A';
-	matrice[85][5] = 'R';
-	matrice[86][5] = 'E';
-	matrice[87][5] = ':';
-	matrice[88][5] = (char)universo + 48;
 }
 
 
@@ -293,3 +286,10 @@ void Mapp::setFinalMapp() {
 	matrice[56][9] = 'R';
 }
 
+void Mapp::ShowConsoleCursor(bool showFlag) {  //funzione per non fare vedere il cursore
+	HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_CURSOR_INFO     cursorInfo;
+	GetConsoleCursorInfo(out, &cursorInfo);
+	cursorInfo.bVisible = showFlag;
+	SetConsoleCursorInfo(out, &cursorInfo);
+}

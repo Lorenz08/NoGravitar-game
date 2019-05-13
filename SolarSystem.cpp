@@ -12,13 +12,12 @@ SolarSystem::SolarSystem(Spaceship p){
 	int numberPlanets = ((rand() % 3) + 4);
 	ptr_SS tmp = new SS();
 	tmp->numberSolarSystem = 1;
-	tmp->puntatore_planet = creaListaPianeti(p, tmp->puntatore_planet, numberPlanets);
+	tmp->puntatore_planet = creaListaPianeti(p, tmp->puntatore_planet, 1);
 	tmp->completed = false;
-	tmp->ssp = p;
 	tmp->next = NULL;
 	tmp->prev = NULL; 
 	SSystem = tmp;
-	SSystem->completed = solarSystemDestroyed();
+	SSystem->completed = false;
 	tmp = NULL;
 	delete tmp;
 }
@@ -31,7 +30,6 @@ void SolarSystem::addSolarSystem(Spaceship p) {
 		tmp->numberSolarSystem = 2;
 		tmp->puntatore_planet = creaListaPianeti(p, tmp->puntatore_planet, numberPlanets);
 		tmp->completed = false;
-		tmp->ssp = p;
 		tmp->next = NULL;
 		tmp->prev = SSystem;
 		SSystem->next = tmp;
@@ -52,7 +50,6 @@ void SolarSystem::addSolarSystem(Spaceship p) {
 		tmp->numberSolarSystem = i;
 		tmp->puntatore_planet = creaListaPianeti(p, tmp->puntatore_planet, numberPlanets);
 		tmp->completed = false;
-		tmp->ssp = p;
 		tmp->next = NULL;
 		tmp->prev = tmpNew;
 		tmpNew->next = tmp;
@@ -132,32 +129,10 @@ ptr_Planet SolarSystem::creaListaPianeti(Spaceship p,  ptr_Planet head, int numb
 }
 
 
-
-void SolarSystem::xxx() {
-	if (SSystem->puntatore_planet->planetSurface == NULL) cout << "null";
-	else cout << "no null";
-}
-
-
-void SolarSystem::xxx2() {
-	ptr_SS x = SSystem->next;
-	while (x->puntatore_planet != NULL) {
-		cout << x->puntatore_planet->xPlanet << endl;
-		x->puntatore_planet = x->puntatore_planet->next;
-	}
-}
-
-
-
-
-
-
-
-
-void SolarSystem::setMappUniverso() {
+void SolarSystem::setMappUniverso(Spaceship p) {
 	Mapp::setMapp();    //setta la cornice
-	setSolarSystemParameters(SSystem->ssp.returnParameter(1), SSystem->ssp.returnParameter(2), SSystem->numberSolarSystem);
-	matrice[SSystem->ssp.returnParameter(1)][SSystem->ssp.returnParameter(2)] = 'Y';     //setta la posizione della navicella
+	setSolarSystemParameters(p.returnParameter(100), p.returnParameter(10), SSystem->numberSolarSystem);
+	matrice[p.returnParameter(1)][p.returnParameter(2)] = 'Y';     
 
 	if ((SSystem->puntatore_planet->listBunker1 == NULL) && (SSystem->puntatore_planet->listBunker2 == NULL)) {
 		matrice[90][5] = 'C';
@@ -175,50 +150,58 @@ void SolarSystem::setMappUniverso() {
 	ptr_Planet tmp = SSystem->puntatore_planet;
 	//setta 'O' per rappresentare i Pianeti in base alle loro coordinate
 	while (tmp != NULL) {
-		if ((tmp->listBunker1 != NULL) && (tmp->listBunker2 != NULL)) matrice[tmp->xPlanet][tmp->yPlanet] = 'O';
-		else  matrice[tmp->xPlanet][tmp->yPlanet] = 'X';
+		if ((tmp->listBunker1 == NULL) && (tmp->listBunker2 == NULL)) matrice[tmp->xPlanet][tmp->yPlanet] = 'X';
+		else  matrice[tmp->xPlanet][tmp->yPlanet] = 'O';
 		tmp = tmp->next;
 	}
 }
+
 
 void SolarSystem::spostamentoUniverso(char& moveSpaceshipUniverso) {
 	if (GetAsyncKeyState(VK_UP)) moveSpaceshipUniverso = 72;
 	else if (GetAsyncKeyState(VK_LEFT)) moveSpaceshipUniverso = 75;
 	else if (GetAsyncKeyState(VK_RIGHT)) moveSpaceshipUniverso = 77;
 	else if (GetAsyncKeyState(VK_DOWN)) moveSpaceshipUniverso = 80;
+	else if (GetAsyncKeyState(0x51)) moveSpaceshipUniverso = ' ';
 }
 
 //77 right
 //75 left
 //72 up
 //80 down
-char SolarSystem::interationSpaceship(bool &b, int &numeroSS){
+char SolarSystem::interationSpaceship(Spaceship &p, bool& b, int& numeroSS) {
 	char n;
 	spostamentoUniverso(n);
 	if (n == 77) {
 		if (!b) {
-			if (matrice[SSystem->ssp.returnParameter(1) + 1][SSystem->ssp.returnParameter(2)] == ' ') SSystem->ssp.moveSpaceshipSolarSystem(n);
-			else if (SSystem->ssp.returnParameter(1) < 77) b = true;
-			else if (((SSystem->puntatore_planet->listBunker1 == NULL) && (SSystem->puntatore_planet->listBunker2 == NULL)) && (SSystem->next != NULL)) numeroSS++;
+			if (matrice[p.returnParameter(1) + 1][p.returnParameter(2)] == ' ') p.moveSpaceshipSolarSystem(n);
+			else if (p.returnParameter(1) < 77) b = true;
+			else if ((SSystem->next != NULL) && (SSystem->completed)) {
+				numeroSS++;
+				p.modificaCoordinateInCasoDiNuovoSistemaSolare(0);
+			}
 		}
 	}
 	else if (n == 75) {
 		if (!b) {
-			if (matrice[SSystem->ssp.returnParameter(1) - 1][SSystem->ssp.returnParameter(2)] == ' ') SSystem->ssp.moveSpaceshipSolarSystem(n);
-			else if (SSystem->ssp.returnParameter(1) > 1) b = true;
-			else if (((SSystem->puntatore_planet->listBunker1 == NULL) && (SSystem->puntatore_planet->listBunker2 == NULL)) && (SSystem->prev != NULL)) numeroSS--;
+			if (matrice[p.returnParameter(1) - 1][p.returnParameter(2)] == ' ') p.moveSpaceshipSolarSystem(n);
+			else if (p.returnParameter(1) > 1) b = true;
+			else if ((SSystem->prev != NULL) && (SSystem->prev->completed)) {
+				numeroSS--;
+				p.modificaCoordinateInCasoDiNuovoSistemaSolare(1);
+			}
 		}
 	}
 	else if (n == 72) {
 		if (!b) {
-			if (matrice[SSystem->ssp.returnParameter(1)][SSystem->ssp.returnParameter(2) - 1] == ' ')  SSystem->ssp.moveSpaceshipSolarSystem(n);
-			else if (SSystem->ssp.returnParameter(2) > 1) b = true;
+			if (matrice[p.returnParameter(1)][p.returnParameter(2) - 1] == ' ')  p.moveSpaceshipSolarSystem(n);
+			else if (p.returnParameter(2) > 1) b = true;
 		}
 	}
 	else if (n == 80) {
 		if (!b) {
-			if (matrice[SSystem->ssp.returnParameter(1)][SSystem->ssp.returnParameter(2) + 1] == ' ') SSystem->ssp.moveSpaceshipSolarSystem(n);
-			else if (SSystem->ssp.returnParameter(2) < 19) b = true;
+			if (matrice[p.returnParameter(1)][p.returnParameter(2) + 1] == ' ') p.moveSpaceshipSolarSystem(n);
+			else if (p.returnParameter(2) < 19) b = true;
 		}
 	}
 	return n;
@@ -227,10 +210,10 @@ char SolarSystem::interationSpaceship(bool &b, int &numeroSS){
 
 
 
-ptr_PlanetSurface SolarSystem::pianetaCor(char n) {
+ptr_PlanetSurface SolarSystem::pianetaCor(Spaceship p, char n) {
 	ptr_Planet tmp = SSystem->puntatore_planet;
-	int xPos = SSystem->ssp.returnParameter(1);
-	int yPos = SSystem->ssp.returnParameter(2);
+	int xPos = p.returnParameter(1);
+	int yPos = p.returnParameter(2);
 	if (n == 77) xPos++;
 	else if (n == 75) xPos--;
 	else if (n == 72) yPos--;
@@ -242,21 +225,24 @@ ptr_PlanetSurface SolarSystem::pianetaCor(char n) {
 }
 
 
-bool SolarSystem::solarSystemDestroyed() {
+void SolarSystem::solarSystemDestroyed() {
+	int i = 0;
 	ptr_Planet tmp = SSystem->puntatore_planet;
 	while (tmp->next != NULL) {
-		if ((tmp->listBunker1 != NULL) && (tmp->listBunker2 != NULL)) return false;
+		if ((tmp->listBunker1 != NULL) && (tmp->listBunker2 != NULL)) i = 1;
+		else if ((tmp->listBunker1 != NULL) || (tmp->listBunker2 != NULL)) i = 1;
 		tmp = tmp->next;
 	}
-	return true;
+	if (i == 0) SSystem->completed = true;
 }
 
 
 void SolarSystem::solarSystemChange(int i) {
 	while (SSystem->numberSolarSystem != i) {
-		if (i < SSystem->numberSolarSystem)SSystem = SSystem->prev;
-		else if (i > SSystem->numberSolarSystem)SSystem = SSystem->next;
+		if (i < SSystem->numberSolarSystem)        SSystem = SSystem->prev;
+		else if (i > SSystem->numberSolarSystem)   SSystem = SSystem->next;
 	}
+	solarSystemDestroyed();
 	SSystem->completed = returnIfDestroyed();
 }
 

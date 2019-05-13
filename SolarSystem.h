@@ -22,7 +22,6 @@ struct SS {
 	int numberSolarSystem;
 	ptr_Planet puntatore_planet;
 	bool completed;
-	Spaceship ssp;
 	SS* next;
 	SS* prev;
 };
@@ -35,12 +34,10 @@ public:
 	SolarSystem(Spaceship p);
 	void addSolarSystem(Spaceship p);
 	ptr_Planet creaListaPianeti(Spaceship p, ptr_Planet head, int u);
-	void xxx();
-	void xxx2();
-	void setMappUniverso();
-	char interationSpaceship(bool &b, int &numeroSS);
-	ptr_PlanetSurface pianetaCor(char n);
-	bool solarSystemDestroyed();
+	void setMappUniverso(Spaceship p);
+	char interationSpaceship(Spaceship &p, bool &b, int &numeroSS);
+	ptr_PlanetSurface pianetaCor(Spaceship p, char n);
+	void solarSystemDestroyed();
 	void solarSystemChange(int i);
 	bool returnIfDestroyed();
 	void spostamentoUniverso(char& moveSpaceshipUniverso);

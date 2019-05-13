@@ -30,8 +30,8 @@ PlanetSurface::PlanetSurface(Spaceship spaceship, ptr_listaBunker1 &head1, ptr_l
 		else if ((valoreSuccessivo == valorePrecedente + 1) && (valoreSuccessivo >= 10)) {
 			matrice[i][valoreSuccessivo - 1] = 92;
 			valorePrecedente = valoreSuccessivo;
-			if (i%37 == 0) head1 = creaBunkerList1(head1, i, valoreSuccessivo - 2);
-			if (i % 23 == 0) head2 = creaBunkerList2(head2, i, valoreSuccessivo - 2);
+			if (i % 77 == 0) head1 = creaBunkerList1(head1, i, valoreSuccessivo - 2);
+			if (i % 65 == 0) head2 = creaBunkerList2(head2, i, valoreSuccessivo - 2);
 			i = i + 1;
 		}
 		else if ((valoreSuccessivo == valorePrecedente) && (valoreSuccessivo >= 10)) {

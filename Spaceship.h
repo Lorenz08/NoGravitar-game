@@ -20,33 +20,6 @@ public:
 	void setInitialPosition();
 	void fuelPlus(int i);
 	bool spaceshipIsAlive();
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//int returnPosition(bool b);
-	//void newSpaceshipPositionSolarSystem(char n);
-	//void rispristinoCoordinateInCasoDiPianeta(char n);
-	//void moveSpaceshipPlanet();
-	//int coordinate(bool scelta);
-	//int coordinatePlanet(bool scelta);
-	//void rispristinoCoordinateInCasoDiPianeta(bool b, char n);
-	//void rispristinoCoordinateInCasoDisuperficie(bool b, char n);
-	//void perditaVitaInCasosuperficie(bool b);
-	//void ripristinoCoordinateUscitaPianeta();
-	//void raggioTraente();
-
-
+	void modificaCoordinateInCasoDiNuovoSistemaSolare(int i);
 };
 
