@@ -1,6 +1,6 @@
 #include <iostream>
 #include <conio.h>
-#include "windows.h"
+#include <Windows.h>
 #include "Mapp.h"
 using namespace std;
 
@@ -32,16 +32,39 @@ void Mapp::setMapp() {
 	matrice[78][20] = 202;
 }
 
+void Mapp::ShowConsoleCursor(bool showFlag){  //funzione per non fare vedere il cursore
+	HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_CURSOR_INFO     cursorInfo;
+	GetConsoleCursorInfo(out, &cursorInfo);
+	cursorInfo.bVisible = showFlag;
+	SetConsoleCursorInfo(out, &cursorInfo);
+}
 
-void Mapp::printMapp() {
+void Mapp::printMapp(int i) {
+	if (i == 1) setInitialMapp();
+	else if (i == 2) setFinalMapp();
 	system("cls");
-	for (int y = 0; y <= yMatrice; y++) {
-		for (int x = 0; x <= xMatrice; x++) {
-			cout << matrice[x][y];
+	ShowConsoleCursor(false);
+	const int WIDTH = 101;
+	const int HEIGHT = 21;
+	SMALL_RECT windowSize = { 0, 0, WIDTH - 1, HEIGHT - 1 };
+	COORD bufferSize = { WIDTH , HEIGHT };
+	COORD characterBufferSize = { WIDTH , HEIGHT };
+	COORD characterPosition = { 0, 0 };
+	SMALL_RECT consoleWriteArea = { 0, 0, WIDTH - 1, HEIGHT - 1 };
+	CHAR_INFO consoleBuffer[WIDTH * HEIGHT];
+	HANDLE wHnd = GetStdHandle(STD_OUTPUT_HANDLE);
+	HANDLE rHnd = GetStdHandle(STD_INPUT_HANDLE);
+	SetConsoleWindowInfo(wHnd, TRUE, &windowSize);
+	SetConsoleScreenBufferSize(wHnd, bufferSize);
+	for (int y = 0; y < HEIGHT; ++y) {
+		for (int x = 0; x < WIDTH; ++x) {
+			consoleBuffer[x + WIDTH * y].Char.AsciiChar = (unsigned char) matrice[x][y];
+			consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN;
 		}
-		cout << '\n';
 	}
-
+	WriteConsoleOutputA(wHnd, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea);
+	Sleep(150);
 }
 
 

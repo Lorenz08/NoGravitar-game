@@ -1,10 +1,11 @@
 #include <iostream>
+#include <Windows.h>
 #include "PlanetSurface.h"
 using namespace std;
 
 
 
-PlanetSurface::PlanetSurface(Spaceship spaceship, ptr_listaBunker &head){
+PlanetSurface::PlanetSurface(Spaceship spaceship, ptr_listaBunker1 &head1, ptr_listaBunker2& head2){
 	setMapp();
 	setPlanetSurfaceParameters(spaceship.returnParameter(100), spaceship.returnParameter(10));
 	matrice[spaceship.returnParameter(3)][spaceship.returnParameter(4)] = 'Y';
@@ -29,7 +30,8 @@ PlanetSurface::PlanetSurface(Spaceship spaceship, ptr_listaBunker &head){
 		else if ((valoreSuccessivo == valorePrecedente + 1) && (valoreSuccessivo >= 10)) {
 			matrice[i][valoreSuccessivo - 1] = 92;
 			valorePrecedente = valoreSuccessivo;
-			if (i%37 == 0) head = creaBunkerList(head, i, valoreSuccessivo - 2);
+			if (i%37 == 0) head1 = creaBunkerList1(head1, i, valoreSuccessivo - 2);
+			if (i % 23 == 0) head2 = creaBunkerList2(head2, i, valoreSuccessivo - 2);
 			i = i + 1;
 		}
 		else if ((valoreSuccessivo == valorePrecedente) && (valoreSuccessivo >= 10)) {
@@ -39,37 +41,43 @@ PlanetSurface::PlanetSurface(Spaceship spaceship, ptr_listaBunker &head){
 			i = i + 1;
 		}
 	}
-	ptr_listaBunker tmp = head;
-	while (tmp != NULL) {
-		matrice[tmp->b1->coordinateBunker(true)][tmp->b1->coordinateBunker(false)] = 'P';
-		tmp = tmp->next;
+	ptr_listaBunker1 tmp1 = head1;
+	while (tmp1 != NULL) {
+		matrice[tmp1->b1->coordinateBunker1(true)][tmp1->b1->coordinateBunker1(false)] = 157;
+		tmp1 = tmp1->next;
+	}
+
+	ptr_listaBunker2 tmp2 = head2;
+	while (tmp2 != NULL) {
+		matrice[tmp2->b2->coordinateBunker2(true)][tmp2->b2->coordinateBunker2(false)] = 153;
+		tmp2 = tmp2->next;
 	}
 }
 
 
-ptr_listaBunker PlanetSurface::creaBunkerList(ptr_listaBunker head, int xB, int yB) {
+ptr_listaBunker1 PlanetSurface::creaBunkerList1(ptr_listaBunker1 head, int xB, int yB) {
 	if (head == NULL) {
-		head = new listaBunker();
-		head->b1 = new Bunker(xB, yB, 3);
+		head = new listaBunker1();
+		head->b1 = new Bunker1(xB, yB, 3);
 		head->next = NULL;
 		head->prev = NULL;
 	}
 	else if (head->next == NULL) {
-		head->next = new listaBunker();
-		head->next->b1 = new Bunker(xB, yB, 3);
+		head->next = new listaBunker1();
+		head->next->b1 = new Bunker1(xB, yB, 3);
 		head->next->next = NULL;
 		head->next->prev = head;
 	}
 	else {
-		ptr_listaBunker tmp, tmpOld;
+		ptr_listaBunker1 tmp, tmpOld;
 		tmpOld = head;
 		tmp = head->next;
 		while (tmpOld->next->next != NULL) {
 			tmp = tmp->next;
 			tmpOld = tmpOld->next;
 		}
-		tmp->next = new listaBunker();
-		tmp->next->b1 = new Bunker(xB, yB, 3);
+		tmp->next = new listaBunker1();
+		tmp->next->b1 = new Bunker1(xB, yB, 3);
 		tmp->next->next = NULL;
 		tmp->next->prev = tmp;
 	}
@@ -77,7 +85,47 @@ ptr_listaBunker PlanetSurface::creaBunkerList(ptr_listaBunker head, int xB, int 
 }
 
 
-void PlanetSurface::interationSpaceship2(Spaceship &p, char n) {
+ptr_listaBunker2 PlanetSurface::creaBunkerList2(ptr_listaBunker2 head, int xB, int yB) {
+	if (head == NULL) {
+		head = new listaBunker2();
+		head->b2 = new Bunker2(xB, yB, 3);
+		head->next = NULL;
+		head->prev = NULL;
+	}
+	else if (head->next == NULL) {
+		head->next = new listaBunker2();
+		head->next->b2 = new Bunker2(xB, yB, 3);
+		head->next->next = NULL;
+		head->next->prev = head;
+	}
+	else {
+		ptr_listaBunker2 tmp, tmpOld;
+		tmpOld = head;
+		tmp = head->next;
+		while (tmpOld->next->next != NULL) {
+			tmp = tmp->next;
+			tmpOld = tmpOld->next;
+		}
+		tmp->next = new listaBunker2();
+		tmp->next->b2 = new Bunker2(xB, yB, 3);
+		tmp->next->next = NULL;
+		tmp->next->prev = tmp;
+	}
+	return head;
+}
+
+void PlanetSurface::spostamentoPlaetSurface(char& moveSpaceshipUniverso) {
+	if (GetAsyncKeyState(VK_UP)) moveSpaceshipUniverso = 72;
+	else if (GetAsyncKeyState(VK_LEFT)) moveSpaceshipUniverso = 75;
+	else if (GetAsyncKeyState(VK_RIGHT)) moveSpaceshipUniverso = 77;
+	else if (GetAsyncKeyState(VK_DOWN)) moveSpaceshipUniverso = 80;
+	else if (GetAsyncKeyState(0x51)) moveSpaceshipUniverso = 'q';
+	else moveSpaceshipUniverso = 'w';
+}
+
+char PlanetSurface::interationSpaceshipPlanetSurface(Spaceship &p) {
+	char n;
+	spostamentoPlaetSurface(n);
 	if ((n == 75) && (matrice[p.returnParameter(3)][p.returnParameter(4) + 1] != '|')) {
 		if (matrice[p.returnParameter(3) - 1][p.returnParameter(4)] == ' ') p.moveSpaceshipPlanet(n);
 		else {
@@ -101,6 +149,7 @@ void PlanetSurface::interationSpaceship2(Spaceship &p, char n) {
 	}
 	else if (n == 'q') raggioTraenteUscente(p);
 	else if (n == 'w') raggioTraenteEntrante(p);
+	return n;
 }
 
 

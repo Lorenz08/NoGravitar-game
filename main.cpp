@@ -14,25 +14,21 @@ int main() {
 	int numeroSS = 1;
 	char k = ' ';
 
-	mapp.setInitialMapp();
-	mapp.printMapp();
+	mapp.printMapp(1);
 	while (k != 'y') k = _getch();
 	while (nav_SS.returnParameter(10) >= 1) {
 		if (x.returnIfDestroyed()) x.addSolarSystem(nav_SS);
 		x.setMappUniverso();
 		x.printMapp();
-		char n = _getch();
-		x.interationSpaceship(n, planetEnter, numeroSS);
+		char n = x.interationSpaceship(planetEnter, numeroSS);
 		while (planetEnter && nav_SS.returnParameter(10) >= 1) {
 			x.pianetaCor(n)->printMapp();
-			char m = _getch();
-			x.pianetaCor(n)->interationSpaceship2(nav_SS, m);
+			char m = x.pianetaCor(n)->interationSpaceshipPlanetSurface(nav_SS);
 			x.pianetaCor(n)->setMappPlanetSurface(nav_SS, m, planetEnter);
 			nav_SS.fuelMinus();
 		}
 		x.solarSystemChange(numeroSS);
 	}
-	mapp.setFinalMapp();
-	mapp.printMapp();
+	mapp.printMapp(2);
 	return 0;
 }
