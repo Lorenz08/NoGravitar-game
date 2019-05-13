@@ -2,7 +2,8 @@
 #include "PlanetSurface.h"
 #include "Mapp.h"
 #include "Spaceship.h"
-#include "Bunker.h"
+#include "Bunker1.h"
+#include "Bunker2.h"
 
 
 struct Planet {
@@ -10,7 +11,8 @@ struct Planet {
 	int xPlanet;
 	int yPlanet;
 	ptr_PlanetSurface planetSurface;
-	ptr_listaBunker bunkerList;
+	ptr_listaBunker1 listBunker1;
+	ptr_listaBunker2 listBunker2;
 	Planet* next;
 	Planet* prev;
 };
@@ -36,10 +38,11 @@ public:
 	void xxx();
 	void xxx2();
 	void setMappUniverso();
-	void interationSpaceship(char n, bool &b, int &numeroSS);
+	char interationSpaceship(bool &b, int &numeroSS);
 	ptr_PlanetSurface pianetaCor(char n);
 	bool solarSystemDestroyed();
 	void solarSystemChange(int i);
 	bool returnIfDestroyed();
+	void spostamentoUniverso(char& moveSpaceshipUniverso);
 };
 
