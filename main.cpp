@@ -18,7 +18,7 @@ int main() {
 	mapp.printMapp(1);
 	while (k != ' ') k = _getch();
 	while (nav_SS.spaceshipIsAlive()) {
-		if (x.returnIfDestroyed()) x.addSolarSystem(nav_SS);
+		//if (x.returnIfDestroyed()) x.addSolarSystem(nav_SS);
 		x.setMappUniverso(nav_SS);
 		x.printMapp();
 		char n = x.interationSpaceship(nav_SS, planetEnter, numeroSS);

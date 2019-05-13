@@ -130,11 +130,12 @@ ptr_Planet SolarSystem::creaListaPianeti(Spaceship p,  ptr_Planet head, int numb
 
 
 void SolarSystem::setMappUniverso(Spaceship p) {
+	if (returnIfDestroyed()) addSolarSystem(p);
 	Mapp::setMapp();    //setta la cornice
 	setSolarSystemParameters(p.returnParameter(100), p.returnParameter(10), SSystem->numberSolarSystem);
 	matrice[p.returnParameter(1)][p.returnParameter(2)] = 'Y';     
 
-	if ((SSystem->puntatore_planet->listBunker1 == NULL) && (SSystem->puntatore_planet->listBunker2 == NULL)) {
+	if (SSystem->completed) {
 		matrice[90][5] = 'C';
 		matrice[91][5] = 'O';
 		matrice[92][5] = 'M';
