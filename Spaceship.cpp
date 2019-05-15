@@ -35,6 +35,7 @@ void Spaceship::moveSpaceshipPlanet(char n) {
 	else if ((matrice[p3][p4] == ' ') && n == 80)	       p4 = p4 + 1;         //GIU---controllo margine
 }
 
+
 int Spaceship::returnParameter(int i) {
 	if (i == 1) return p1;
 	else if (i == 2) return p2;
@@ -44,23 +45,28 @@ int Spaceship::returnParameter(int i) {
 	else if (i == 100) return fuel;
 }
 
+
 void Spaceship::fuelMinus() {
 	fuel--;
 }
 
+
 void Spaceship::lifeMinus() {
 	life--;
 }
+
 
 void Spaceship::setInitialPosition() {
 	p3 = 3;
 	p4 = 3;
 }
 
+
 void Spaceship::fuelPlus(int i) {
 	if (i == 0) fuel = fuel + 500;
 	else if (i == 1) fuel = fuel + 100;
 }
+
 
 bool Spaceship::spaceshipIsAlive() {
 	if ((fuel >= 1) && (life >= 1)) return true;

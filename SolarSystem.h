@@ -28,9 +28,9 @@ struct SS {
 typedef SS* ptr_SS;
 
 class SolarSystem : public Mapp {
+protected:
+	ptr_SS SSystem;
 public:
-	SS* SSystem;
-
 	SolarSystem(Spaceship p);
 	void addSolarSystem(Spaceship p);
 	ptr_Planet creaListaPianeti(Spaceship p, ptr_Planet head, int u);

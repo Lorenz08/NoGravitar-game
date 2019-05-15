@@ -6,7 +6,6 @@
 using namespace std;
 
 
-
 SolarSystem::SolarSystem(Spaceship p){
 	srand((unsigned)time(0));
 	int numberPlanets = ((rand() % 3) + 4);
@@ -17,10 +16,10 @@ SolarSystem::SolarSystem(Spaceship p){
 	tmp->next = NULL;
 	tmp->prev = NULL; 
 	SSystem = tmp;
-	SSystem->completed = false;
 	tmp = NULL;
 	delete tmp;
 }
+
 
 void SolarSystem::addSolarSystem(Spaceship p) {
 	srand((unsigned)time(0));
@@ -61,6 +60,7 @@ void SolarSystem::addSolarSystem(Spaceship p) {
 		delete tmpOld;
 	}
 }
+
 
 ptr_Planet SolarSystem::creaListaPianeti(Spaceship p,  ptr_Planet head, int numberPlanets) {
 	for (int i = 1; i <= numberPlanets; i++) {
@@ -163,13 +163,10 @@ void SolarSystem::spostamentoUniverso(char& moveSpaceshipUniverso) {
 	else if (GetAsyncKeyState(VK_LEFT)) moveSpaceshipUniverso = 75;
 	else if (GetAsyncKeyState(VK_RIGHT)) moveSpaceshipUniverso = 77;
 	else if (GetAsyncKeyState(VK_DOWN)) moveSpaceshipUniverso = 80;
-	else if (GetAsyncKeyState(0x51)) moveSpaceshipUniverso = ' ';
+	else if (GetAsyncKeyState(0x51)) moveSpaceshipUniverso = '2';
 }
 
-//77 right
-//75 left
-//72 up
-//80 down
+
 char SolarSystem::interationSpaceship(Spaceship &p, bool& b, int& numeroSS) {
 	char n;
 	spostamentoUniverso(n);
@@ -210,7 +207,6 @@ char SolarSystem::interationSpaceship(Spaceship &p, bool& b, int& numeroSS) {
 
 
 
-
 ptr_PlanetSurface SolarSystem::pianetaCor(Spaceship p, char n) {
 	ptr_Planet tmp = SSystem->puntatore_planet;
 	int xPos = p.returnParameter(1);
@@ -229,7 +225,7 @@ ptr_PlanetSurface SolarSystem::pianetaCor(Spaceship p, char n) {
 void SolarSystem::solarSystemDestroyed() {
 	int i = 0;
 	ptr_Planet tmp = SSystem->puntatore_planet;
-	while (tmp->next != NULL) {
+	while (tmp != NULL) {
 		if ((tmp->listBunker1 != NULL) && (tmp->listBunker2 != NULL)) i = 1;
 		else if ((tmp->listBunker1 != NULL) || (tmp->listBunker2 != NULL)) i = 1;
 		tmp = tmp->next;
@@ -246,6 +242,7 @@ void SolarSystem::solarSystemChange(int i) {
 	solarSystemDestroyed();
 	SSystem->completed = returnIfDestroyed();
 }
+
 
 bool SolarSystem::returnIfDestroyed() {
 	return SSystem->completed;

@@ -8,15 +8,17 @@
 using namespace std;
 
 int main() {
+	Mapp mapp = Mapp(); 
+	mapp.printMapp(1);
+	char k = '2';
+	while (k != VK_RETURN) k = _getch();
+
+	etichetta:
 	Spaceship nav_SS = Spaceship();
 	SolarSystem x = SolarSystem(nav_SS);
-	Mapp mapp = Mapp();
 	bool planetEnter = false;
 	int numeroSS = 1;
-	char k = '2';
 
-	mapp.printMapp(1);
-	while (k != ' ') k = _getch();
 	while (nav_SS.spaceshipIsAlive()) {
 		//if (x.returnIfDestroyed()) x.addSolarSystem(nav_SS);
 		x.setMappUniverso(nav_SS);
@@ -31,5 +33,10 @@ int main() {
 		x.solarSystemChange(numeroSS);
 	}
 	mapp.printMapp(2);
+	char h = '2';
+	while (h != 'n') {
+		if (h == 's')	goto etichetta;
+		else h = _getch();
+	}
 	return 0;
 }

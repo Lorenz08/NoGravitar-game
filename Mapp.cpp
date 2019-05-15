@@ -29,11 +29,25 @@ void Mapp::printMapp(int i) {
 	for (int y = 0; y < HEIGHT; ++y) {
 		for (int x = 0; x < WIDTH; ++x) {
 			consoleBuffer[x + WIDTH * y].Char.AsciiChar = (unsigned char)matrice[x][y];
-			consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN;
+			if ((matrice[x][y] == 'Y') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_RED;
+			else if ((matrice[x][y] == 'O') && (x < 78)) {
+				if (i != 1) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_GREEN;
+				else  consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN;
+			}
+			else if (((matrice[x][y] == '/') || (matrice[x][y] == 92) || (matrice[x][y] == ':') || (matrice[x][y] == 34)) && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_GREEN;
+			else if ((matrice[x][y] == 'X') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_BLUE;
+			else if ((matrice[x][y] == 'C') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = 14;
+			else if ((matrice[x][y] == 'c') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = 14;
+			else if ((matrice[x][y] == 'B') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_RED;
+			else if ((matrice[x][y] == 'b') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_RED;
+			else if ((matrice[x][y] == '|') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = BACKGROUND_RED;
+			else if ((matrice[x][y] == 34) && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_GREEN;
+			else consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN;
+
 		}
 	}
 	WriteConsoleOutputA(wHnd, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea);
-	Sleep(150);
+	Sleep(100);
 }
 
 
@@ -259,6 +273,8 @@ void Mapp::setInitialMapp() {
 }
 
 
+
+
 void Mapp::setFinalMapp() {
 	for (int y = 0; y <= yMatrice; y++) {
 		for (int x = 0; x <= xMatrice; x++) {
@@ -275,16 +291,64 @@ void Mapp::setFinalMapp() {
 	for (i = 1; i < xMatrice; i++)  matrice[i][0] = 205;
 	for (i = 1; i < xMatrice; i++)  matrice[i][yMatrice] = 205;
 
-	matrice[48][9] = 'G';
-	matrice[49][9] = 'A';
-	matrice[50][9] = 'M';
-	matrice[51][9] = 'E';
-	matrice[52][9] = ' ';
-	matrice[53][9] = '0';
-	matrice[54][9] = 'V';
-	matrice[55][9] = 'E';
-	matrice[56][9] = 'R';
+	matrice[45][9] = 'G';
+	matrice[46][9] = 'A';
+	matrice[47][9] = 'M';
+	matrice[48][9] = 'E';
+	matrice[49][9] = ' ';
+	matrice[50][9] = '0';
+	matrice[51][9] = 'V';
+	matrice[52][9] = 'E';
+	matrice[53][9] = 'R';
+
+	matrice[38][10] = 'D';
+	matrice[39][10] = 'o';
+	matrice[40][10] = ' ';
+	matrice[41][10] = 'y';
+	matrice[42][10] = 'o';
+	matrice[43][10] = 'u';
+	matrice[44][10] = ' ';
+	matrice[45][10] = 'w';
+	matrice[46][10] = 'a';
+	matrice[47][10] = 'n';
+	matrice[48][10] = 't';
+	matrice[49][10] = ' ';
+	matrice[50][10] = 't';
+	matrice[51][10] = 'o';
+	matrice[52][10] = ' ';
+	matrice[53][10] = 'c';
+	matrice[54][10] = 'o';
+	matrice[55][10] = 'n';
+	matrice[56][10] = 't';
+	matrice[57][10] = 'i';
+	matrice[58][10] = 'n';
+	matrice[59][10] = 'u';
+	matrice[60][10] = 'e';
+	matrice[61][10] = '?';
+
+	matrice[37][13] = 'Y';
+	matrice[38][13] = 'E';
+	matrice[39][13] = 'S';
+	matrice[35][14] = 'P';
+	matrice[36][14] = 'r';
+	matrice[37][14] = 'e';
+	matrice[38][14] = 's';
+	matrice[39][14] = 's';
+	matrice[40][14] = ':';
+	matrice[41][14] = 'y';
+
+	matrice[57][13] = 'N';
+	matrice[58][13] = 'O';
+	matrice[55][14] = 'P';
+	matrice[56][14] = 'r';
+	matrice[57][14] = 'e';
+	matrice[58][14] = 's';
+	matrice[59][14] = 's';
+	matrice[60][14] = ':';
+	matrice[61][14] = 'n';
+
 }
+
 
 void Mapp::ShowConsoleCursor(bool showFlag) {  //funzione per non fare vedere il cursore
 	HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);

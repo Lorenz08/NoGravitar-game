@@ -17,8 +17,6 @@ protected:
 public:
 	Bunker1(int x, int y, int life);
 	int coordinateBunker1(bool b);
-
-
 };
 typedef class Bunker1* ptr_Bunker1;
 

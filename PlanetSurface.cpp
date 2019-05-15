@@ -21,21 +21,37 @@ PlanetSurface::PlanetSurface(Spaceship spaceship, ptr_listaBunker1 &head1, ptr_l
 	int i = 1;
 	while (i <= 77) {
 		valoreSuccessivo = (rand() % 16) + 1;
+		int sup = 0;
 
 		if ((valoreSuccessivo == valorePrecedente - 1) && (valoreSuccessivo >= 10)) {
 			matrice[i][valoreSuccessivo] = '/';
+			sup = valoreSuccessivo + 1;
+			while (sup < 20) {
+				matrice[i][sup] = 34;
+				sup++;
+			}
 			valorePrecedente = valoreSuccessivo;
 			i = i + 1;
 		}
 		else if ((valoreSuccessivo == valorePrecedente + 1) && (valoreSuccessivo >= 10)) {
 			matrice[i][valoreSuccessivo - 1] = 92;
+			sup = valoreSuccessivo;
+			while (sup < 20) {
+				matrice[i][sup] = 34;
+				sup++;
+			}
 			valorePrecedente = valoreSuccessivo;
 			if (i % 77 == 0) head1 = creaBunkerList1(head1, i, valoreSuccessivo - 2);
 			if (i % 65 == 0) head2 = creaBunkerList2(head2, i, valoreSuccessivo - 2);
 			i = i + 1;
 		}
 		else if ((valoreSuccessivo == valorePrecedente) && (valoreSuccessivo >= 10)) {
-			matrice[i][valoreSuccessivo] = 238;
+			matrice[i][valoreSuccessivo] = 34;
+			sup = valoreSuccessivo + 1;
+			while (sup < 20) {
+				matrice[i][sup] = 34;
+				sup++;
+			}
 			if ((i % 25) == 0) matrice[i][valoreSuccessivo - 1] = 'C';
 			if ((i % 10) == 0) matrice[i][valoreSuccessivo - 1] = 'c';
 			i = i + 1;
@@ -43,13 +59,13 @@ PlanetSurface::PlanetSurface(Spaceship spaceship, ptr_listaBunker1 &head1, ptr_l
 	}
 	ptr_listaBunker1 tmp1 = head1;
 	while (tmp1 != NULL) {
-		matrice[tmp1->b1->coordinateBunker1(true)][tmp1->b1->coordinateBunker1(false)] = 157;
+		matrice[tmp1->b1->coordinateBunker1(true)][tmp1->b1->coordinateBunker1(false)] = 'b';
 		tmp1 = tmp1->next;
 	}
 
 	ptr_listaBunker2 tmp2 = head2;
 	while (tmp2 != NULL) {
-		matrice[tmp2->b2->coordinateBunker2(true)][tmp2->b2->coordinateBunker2(false)] = 153;
+		matrice[tmp2->b2->coordinateBunker2(true)][tmp2->b2->coordinateBunker2(false)] = 'B';
 		tmp2 = tmp2->next;
 	}
 }
@@ -114,6 +130,7 @@ ptr_listaBunker2 PlanetSurface::creaBunkerList2(ptr_listaBunker2 head, int xB, i
 	return head;
 }
 
+
 void PlanetSurface::spostamentoPlaetSurface(char& moveSpaceshipUniverso) {
 	if (GetAsyncKeyState(VK_UP)) moveSpaceshipUniverso = 72;
 	else if (GetAsyncKeyState(VK_LEFT)) moveSpaceshipUniverso = 75;
@@ -122,6 +139,7 @@ void PlanetSurface::spostamentoPlaetSurface(char& moveSpaceshipUniverso) {
 	else if (GetAsyncKeyState(0x51)) moveSpaceshipUniverso = 'q';
 	else moveSpaceshipUniverso = 'w';
 }
+
 
 char PlanetSurface::interationSpaceshipPlanetSurface(Spaceship &p) {
 	char n;
