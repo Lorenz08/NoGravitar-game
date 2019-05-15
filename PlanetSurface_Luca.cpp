@@ -6,7 +6,8 @@ using namespace std;
 
 
 PlanetSurface::PlanetSurface(Spaceship spaceship, ptr_listaBunker1& head1, ptr_listaBunker2& head2) {
-	punt = NULL; 
+	punt = NULL;
+
 	setMapp();
 	setPlanetSurfaceParameters(spaceship.returnParameter(100), spaceship.returnParameter(10));
 	matrice[spaceship.returnParameter(3)][spaceship.returnParameter(4)] = 'Y';
@@ -153,7 +154,10 @@ char PlanetSurface::interationSpaceshipPlanetSurface(Spaceship & p) {
 
 	else if (n == 'q') raggioTraenteUscente(p);
 	else if (n == 'w') raggioTraenteEntrante(p);
-	else if (n == 'p') addBullets(p.returnParameter(3), p.returnParameter(4) + 1);
+	else if (n == 'p') {
+		addBullets(p.returnParameter(3), p.returnParameter(4) +1);
+		refresh();
+	}
 
 	return n;
 }
@@ -210,11 +214,9 @@ void PlanetSurface::raggioTraenteEntrante(Spaceship p) {
 void PlanetSurface::addBullets(int x, int y) {
 	if (punt == NULL) {
 		punt = new listaBullets;
-		punt->b = new Bullets(x, y);
 		punt->xCoordinate = x;
 		punt->yCoordinate = y;
 		punt->eliminato = false;
-		punt->sparo = ':';
 		punt->next = NULL;
 	}
 	else {
@@ -223,18 +225,17 @@ void PlanetSurface::addBullets(int x, int y) {
 			tmp = tmp->next;
 		}
 		tmp->next = new listaBullets;
-		tmp->next->b = new Bullets(x, y);
-		tmp->next->xCoordinate = x;
-		tmp->next->yCoordinate = y;
 		tmp->next->eliminato = false;
 		tmp = tmp->next;
-		tmp->sparo = ':';
+		tmp->xCoordinate= x;
+		tmp->yCoordinate = y;
 		tmp->next = NULL;
 	}
 }
 
 ptr_listaBullets PlanetSurface::deleteBullets(ptr_listaBullets p) {
-	if (p != NULL) {
+
+	/*if (p != NULL) {
 		if (p->eliminato == true) {
 			ptr_listaBullets tmp = p;
 			p = p->next;
@@ -253,6 +254,21 @@ ptr_listaBullets PlanetSurface::deleteBullets(ptr_listaBullets p) {
 	}
 	else {
 		return(p);
+	}*/
+
+	if (p == NULL)
+		return NULL;
+
+	else if (p->eliminato == true) {
+		ptr_listaBullets tmp = p;
+		p = p->next;
+		delete tmp;
+		return deleteBullets(p);
+	}
+
+	else {
+		p->next = deleteBullets(p->next);
+		return p;
 	}
 }
 
@@ -260,27 +276,23 @@ void PlanetSurface::refresh() {
 	ptr_listaBullets tmp = punt;
 
 	while (tmp != NULL) {
-		
-		if (matrice[tmp->xCoordinate][tmp->yCoordinate] == ' ') {
-			matrice[tmp->xCoordinate][tmp->yCoordinate] = ' ';
+		if (matrice[tmp->xCoordinate][tmp->yCoordinate] == ' ' || matrice[tmp->xCoordinate][tmp->yCoordinate] == 'b' || matrice[tmp->xCoordinate][tmp->yCoordinate] == 'B') {
 
-			//tmp->b->setCoordinate(tmp->b->getCoordinate(true) + 1, tmp->b->getCoordinate(false));
+			matrice[tmp->xCoordinate][tmp->yCoordinate-1] = ' ';
+
 			tmp->xCoordinate = tmp->xCoordinate;
 			tmp->yCoordinate = tmp->yCoordinate + 1;
 
-
-
-
-			matrice[tmp->xCoordinate][tmp->yCoordinate] = tmp->sparo;
-
+			matrice[tmp->xCoordinate][tmp->yCoordinate-1] = '.';
 		}
-
-		else
+		else 
 			tmp->eliminato = true;
 
 		tmp = tmp->next;
 	}
+
 	punt = deleteBullets(punt);
+
 }
 
 
