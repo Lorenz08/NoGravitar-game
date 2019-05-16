@@ -222,6 +222,38 @@ ptr_PlanetSurface SolarSystem::pianetaCor(Spaceship p, char n) {
 }
 
 
+ptr_listaBunker1 SolarSystem::ritornaBunkerList1(Spaceship p, char n) {
+	ptr_Planet tmp = SSystem->puntatore_planet;
+	int xPos = p.returnParameter(1);
+	int yPos = p.returnParameter(2);
+	if (n == 77) xPos++;
+	else if (n == 75) xPos--;
+	else if (n == 72) yPos--;
+	else if (n == 80) yPos++;
+	while ((tmp->xPlanet != xPos) || (tmp->yPlanet != yPos)) {
+		tmp = tmp->next;
+	}
+	return tmp->listBunker1;
+}
+
+
+ptr_listaBunker2 SolarSystem::ritornaBunkerList2(Spaceship p, char n) {
+	ptr_Planet tmp = SSystem->puntatore_planet;
+	int xPos = p.returnParameter(1);
+	int yPos = p.returnParameter(2);
+	if (n == 77) xPos++;
+	else if (n == 75) xPos--;
+	else if (n == 72) yPos--;
+	else if (n == 80) yPos++;
+	while ((tmp->xPlanet != xPos) || (tmp->yPlanet != yPos)) {
+		tmp = tmp->next;
+	}
+	return tmp->listBunker2;
+}
+
+
+
+
 void SolarSystem::solarSystemDestroyed() {
 	int i = 0;
 	ptr_Planet tmp = SSystem->puntatore_planet;

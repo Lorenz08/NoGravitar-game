@@ -41,5 +41,7 @@ public:
 	void solarSystemChange(int i);
 	bool returnIfDestroyed();
 	void spostamentoUniverso(char& moveSpaceshipUniverso);
+	ptr_listaBunker1 ritornaBunkerList1(Spaceship p, char n);
+	ptr_listaBunker2 ritornaBunkerList2(Spaceship p, char n);
 };
 

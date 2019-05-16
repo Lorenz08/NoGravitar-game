@@ -137,11 +137,12 @@ void PlanetSurface::spostamentoPlaetSurface(char& moveSpaceshipUniverso) {
 	else if (GetAsyncKeyState(VK_RIGHT)) moveSpaceshipUniverso = 77;
 	else if (GetAsyncKeyState(VK_DOWN)) moveSpaceshipUniverso = 80;
 	else if (GetAsyncKeyState(0x51)) moveSpaceshipUniverso = 'q';
+	else if (GetAsyncKeyState(0x5A)) moveSpaceshipUniverso = 'z';
 	else moveSpaceshipUniverso = 'w';
 }
 
 
-char PlanetSurface::interationSpaceshipPlanetSurface(Spaceship &p) {
+char PlanetSurface::interationSpaceshipPlanetSurface(Spaceship &p, ptr_listaBunker1& head1, ptr_listaBunker2& head2) {
 	char n;
 	spostamentoPlaetSurface(n);
 	if ((n == 75) && (matrice[p.returnParameter(3)][p.returnParameter(4) + 1] != '|')) {
@@ -167,6 +168,10 @@ char PlanetSurface::interationSpaceshipPlanetSurface(Spaceship &p) {
 	}
 	else if (n == 'q') raggioTraenteUscente(p);
 	else if (n == 'w') raggioTraenteEntrante(p);
+	else if (n == 'z') {
+		addBullets(p);
+	}
+	refresh(p, head1, head2);
 	return n;
 }
 
@@ -217,4 +222,71 @@ void PlanetSurface::raggioTraenteEntrante(Spaceship p) {
 		matrice[x][y + 1] = ' ';
 		y++;
 	}
+}
+
+
+void PlanetSurface::addBullets(Spaceship &p) {
+	if (p.LP == NULL) {
+		p.LP = new Bullets();
+		p.LP->xBullet = p.returnParameter(3);
+		p.LP->yBullet = p.returnParameter(4);
+		p.LP->eliminato = false;
+		p.LP->next = NULL;
+	}
+	else {
+		ptr_Bullets tmp = p.LP;
+		while (tmp->next != NULL) {
+			tmp = tmp->next;
+		}
+		tmp->next = new Bullets();
+		tmp->next->eliminato = false;
+		tmp = tmp->next;
+		tmp->xBullet = p.returnParameter(3);
+		tmp->yBullet = p.returnParameter(4);
+		tmp->next = NULL;
+	}
+}
+
+
+ptr_Bullets PlanetSurface::deleteBullets(ptr_Bullets &p) {
+	if (p == NULL)
+		return NULL;
+
+	else if (p->eliminato == true) {
+		ptr_Bullets tmp = p;
+		p = p->next;
+		delete tmp;
+		return deleteBullets(p);
+	}
+
+	else {
+		p->next = deleteBullets(p->next);
+		return p;
+	}
+}
+
+
+void PlanetSurface::refresh(Spaceship &p, ptr_listaBunker1& head1, ptr_listaBunker2& head2) {
+	ptr_Bullets tmp = p.LP;
+
+	while (tmp != NULL) {
+		if (matrice[tmp->xBullet][tmp->yBullet] != 'Y') matrice[tmp->xBullet][tmp->yBullet] = ' ';
+		tmp->yBullet++;
+		if (matrice[tmp->xBullet][tmp->yBullet] == ' ') {
+			matrice[tmp->xBullet][tmp->yBullet] = 250;
+		}
+		else if (matrice[tmp->xBullet][tmp->yBullet] == 'b') {
+			ptr_listaBunker1 tmp1 = head1;
+			while ((tmp1->b1->coordinateBunker1(true) == tmp->xBullet) && (tmp1->b1->coordinateBunker1(false) == tmp->yBullet)) tmp1 = tmp1->next;
+			tmp1->b1->minusLife();
+		}
+		else if (matrice[tmp->xBullet][tmp->yBullet] == 'B') {
+			ptr_listaBunker2 tmp2 = head2;
+			while ((tmp2->b2->coordinateBunker2(true) == tmp->xBullet) && (tmp2->b2->coordinateBunker2(false) == tmp->yBullet)) tmp2 = tmp2->next;
+			tmp2->b2->minusLife();
+		}
+		else tmp->eliminato = true;
+		tmp = tmp->next;
+	}
+	p.LP = deleteBullets(p.LP);
 }

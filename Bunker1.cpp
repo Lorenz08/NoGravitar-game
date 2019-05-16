@@ -16,3 +16,7 @@ int Bunker1::coordinateBunker1(bool b) {
 	if (b) return xBunker1;
 	else return yBunker1;
 }
+
+void Bunker1::minusLife() {
+	lifeBunker1--;
+}

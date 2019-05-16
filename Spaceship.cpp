@@ -13,6 +13,7 @@ Spaceship::Spaceship(){
 	p4 = 3;
 	life = 5;
 	fuel = 1000;
+	LP = NULL;
 }
 
 
@@ -20,9 +21,9 @@ Spaceship::Spaceship(){
 //prima di modificare le coordinate della navicella, fa un controllo per evitare che esca dalla mappa
 void Spaceship::moveSpaceshipSolarSystem(char n) {
 	if ((matrice[p1 - 1][p2] == ' ') && n == 75)           p1 = p1 - 1;			//SINISTRA---controllo margine
-	else if ((matrice[p1 + 1][p2] == ' ') && n == 77)  p1 = p1 + 1;        	//DESTRA---controllo margine
-	else if ((matrice[p1][p2 - 1] == ' ') && n == 72)	p2 = p2 - 1;	        //SU---controllo marigine
-	else if ((matrice[p1][p2 + 1] == ' ') && n == 80)	p2 = p2 + 1;            //GIU---controllo margine
+	else if ((matrice[p1 + 1][p2] == ' ') && n == 77)      p1 = p1 + 1;        	//DESTRA---controllo margine
+	else if ((matrice[p1][p2 - 1] == ' ') && n == 72)	   p2 = p2 - 1;	        //SU---controllo marigine
+	else if ((matrice[p1][p2 + 1] == ' ') && n == 80)	   p2 = p2 + 1;            //GIU---controllo margine
 }
 
 

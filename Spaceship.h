@@ -1,5 +1,6 @@
 #pragma once
 #include "Mapp.h"
+#include "BulletsList.h"
 
 
 class Spaceship : public Mapp{
@@ -10,7 +11,9 @@ protected:
 	int p4;     //coordinate x della navicella all'interno del pianeta
 	int life;	//vita della navicella
 	int fuel; 	//carburante della navicella
+
 public:
+	ptr_Bullets LP;
 	Spaceship();
 	void moveSpaceshipSolarSystem(char n);
 	void moveSpaceshipPlanet(char n);
