@@ -60,12 +60,14 @@ PlanetSurface::PlanetSurface(Spaceship spaceship, ptr_listaBunker1& head1, ptr_l
 ptr_listaBunker1 PlanetSurface::creaBunkerList1(ptr_listaBunker1 head, int xB, int yB) {
 	if (head == NULL) {
 		head = new listaBunker1();
+		head->proiettili = new listaBullets;
 		head->b1 = new Bunker1(xB, yB, 3);
 		head->next = NULL;
 		head->prev = NULL;
 	}
 	else if (head->next == NULL) {
 		head->next = new listaBunker1();
+		head->next->proiettili = new listaBullets;
 		head->next->b1 = new Bunker1(xB, yB, 3);
 		head->next->next = NULL;
 		head->next->prev = head;
@@ -79,10 +81,14 @@ ptr_listaBunker1 PlanetSurface::creaBunkerList1(ptr_listaBunker1 head, int xB, i
 			tmpOld = tmpOld->next;
 		}
 		tmp->next = new listaBunker1();
+		tmp->next->proiettili = new listaBullets;
 		tmp->next->b1 = new Bunker1(xB, yB, 3);
 		tmp->next->next = NULL;
 		tmp->next->prev = tmp;
 	}
+	addBullets(xB, yB);
+	refresh(-1);
+
 	return head;
 }
 
@@ -155,9 +161,10 @@ char PlanetSurface::interationSpaceshipPlanetSurface(Spaceship & p) {
 	else if (n == 'q') raggioTraenteUscente(p);
 	else if (n == 'w') raggioTraenteEntrante(p);
 	else if (n == 'p') {
-		addBullets(p.returnParameter(3), p.returnParameter(4) +1);
-		refresh();
+		addBullets(p.returnParameter(3), p.returnParameter(4));
+		refresh(1);
 	}
+
 
 	return n;
 }
@@ -272,18 +279,22 @@ ptr_listaBullets PlanetSurface::deleteBullets(ptr_listaBullets p) {
 	}
 }
 
-void PlanetSurface::refresh() {
+void PlanetSurface::refresh(int incremento) {
 	ptr_listaBullets tmp = punt;
 
 	while (tmp != NULL) {
-		if (matrice[tmp->xCoordinate][tmp->yCoordinate] == ' ' || matrice[tmp->xCoordinate][tmp->yCoordinate] == 'b' || matrice[tmp->xCoordinate][tmp->yCoordinate] == 'B') {
+		matrice[tmp->xCoordinate][tmp->yCoordinate] = ' ';
+		tmp->xCoordinate = tmp->xCoordinate;
+		tmp->yCoordinate = tmp->yCoordinate + incremento;
 
-			matrice[tmp->xCoordinate][tmp->yCoordinate-1] = ' ';
+		if (matrice[tmp->xCoordinate][tmp->yCoordinate] == 'b') {
 
-			tmp->xCoordinate = tmp->xCoordinate;
-			tmp->yCoordinate = tmp->yCoordinate + 1;
+			matrice[tmp->xCoordinate][tmp->yCoordinate] = '.';
+		}
 
-			matrice[tmp->xCoordinate][tmp->yCoordinate-1] = '.';
+		if (matrice[tmp->xCoordinate][tmp->yCoordinate] == ' ') {
+
+			matrice[tmp->xCoordinate][tmp->yCoordinate] = '.';
 		}
 		else 
 			tmp->eliminato = true;

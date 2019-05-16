@@ -23,6 +23,6 @@ public:
 
 	void addBullets(int x, int y);
 	ptr_listaBullets deleteBullets(ptr_listaBullets);
-	void refresh();
+	void refresh(int incremento);
 };
 typedef PlanetSurface* ptr_PlanetSurface;
