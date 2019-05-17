@@ -9,7 +9,7 @@ using namespace std;
 
 int main() {
 	Mapp mapp = Mapp(); 
-	mapp.printMapp(1);
+	mapp.printMapp(1,1);
 	char k = '2';
 	while (k != VK_RETURN) k = _getch();
 
@@ -36,11 +36,12 @@ int main() {
 		}
 		x.solarSystemChange(numeroSS);
 	}
-	mapp.printMapp(2);
+	mapp.printMapp(2,1);
 	char h = '2';
 	while (h != 'n') {
 		if (h == 'y')	goto etichetta;
 		else h = _getch();
 	}
+	mapp.printMapp(3, 1);
 	return 0;
 }

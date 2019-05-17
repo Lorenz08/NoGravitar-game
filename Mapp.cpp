@@ -9,9 +9,10 @@ Mapp::Mapp(){
 }
 
 
-void Mapp::printMapp(int i) {
+void Mapp::printMapp(int i, int a) {
 	if (i == 1) setInitialMapp();
-	else if (i == 2) setFinalMapp();
+	else if (i == 2) setContinueMapp();
+	else if (i == 3) setFinalMapp();
 	system("cls");
 	ShowConsoleCursor(false);
 	const int WIDTH = 101;
@@ -29,21 +30,23 @@ void Mapp::printMapp(int i) {
 	for (int y = 0; y < HEIGHT; ++y) {
 		for (int x = 0; x < WIDTH; ++x) {
 			consoleBuffer[x + WIDTH * y].Char.AsciiChar = (unsigned char)matrice[x][y];
-			if ((matrice[x][y] == 'Y') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_RED;
-			else if ((matrice[x][y] == 'O') && (x < 78)) {
-				if (i != 1) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_GREEN;
-				else  consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN;
+			if (a == 0) {
+				if ((matrice[x][y] == 'Y') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_RED;
+				else if ((matrice[x][y] == 'O') && (x < 78)) {
+					if (i != 1) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_GREEN;
+					else  consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN;
+				}
+				else if (((matrice[x][y] == '/') || (matrice[x][y] == 92) || (matrice[x][y] == ':') || (matrice[x][y] == 34)) && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_GREEN;
+				else if ((matrice[x][y] == 'X') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_BLUE;
+				else if ((matrice[x][y] == 'C') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = 14;
+				else if ((matrice[x][y] == 'c') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = 14;
+				else if ((matrice[x][y] == 'B') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_RED;
+				else if ((matrice[x][y] == 'b') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = 12;
+				else if ((matrice[x][y] == '|') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = BACKGROUND_RED;
+				else if ((matrice[x][y] == 34) && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_GREEN;
+				else consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN;
 			}
-			else if (((matrice[x][y] == '/') || (matrice[x][y] == 92) || (matrice[x][y] == ':') || (matrice[x][y] == 34)) && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_GREEN;
-			else if ((matrice[x][y] == 'X') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_BLUE;
-			else if ((matrice[x][y] == 'C') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = 14;
-			else if ((matrice[x][y] == 'c') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = 14;
-			else if ((matrice[x][y] == 'B') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_RED;
-			else if ((matrice[x][y] == 'b') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_RED;
-			else if ((matrice[x][y] == '|') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = BACKGROUND_RED;
-			else if ((matrice[x][y] == 34) && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_GREEN;
-			else consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN;
-
+			else if (a == 1) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN;
 		}
 	}
 	WriteConsoleOutputA(wHnd, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea);
@@ -300,6 +303,10 @@ void Mapp::setFinalMapp() {
 	matrice[51][9] = 'V';
 	matrice[52][9] = 'E';
 	matrice[53][9] = 'R';
+}
+
+void Mapp::setContinueMapp() {
+	setFinalMapp();
 
 	matrice[38][10] = 'D';
 	matrice[39][10] = 'o';
@@ -346,7 +353,6 @@ void Mapp::setFinalMapp() {
 	matrice[59][14] = 's';
 	matrice[60][14] = ':';
 	matrice[61][14] = 'n';
-
 }
 
 

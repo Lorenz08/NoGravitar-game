@@ -19,9 +19,14 @@ using namespace std;
 
 	//setta il resto della superficie facendo dei confronti per avere uno scostamento (negativo o positivo) massimo di 1
 	int i = 1;
+	int numeroBunker1 = 0;
+	int numeroBunker2 = 0;
+	int tmp = 0;
+
 	while (i <= 77) {
 		valoreSuccessivo = (rand() % 16) + 1;
 		int sup = 0;
+
 
 		if ((valoreSuccessivo == valorePrecedente - 1) && (valoreSuccessivo >= 10)) {
 			matrice[i][valoreSuccessivo] = '/';
@@ -31,6 +36,16 @@ using namespace std;
 				sup++;
 			}
 			valorePrecedente = valoreSuccessivo;
+			if ((i >= tmp + 10) && (numeroBunker1 <= 1)&&(i % ((rand() % 15) + 1) == 0)) {
+				head1 = creaBunkerList1(head1, i, valoreSuccessivo - 1);
+				tmp = i;
+				numeroBunker1++;
+			}
+			if ((i >= tmp + 10) && (numeroBunker2 < 1) && (i % ((rand() % 3) + 4) == 0) && (matrice[i][valoreSuccessivo - 1] == ' ')) {
+				head2 = creaBunkerList2(head2, i, valoreSuccessivo - 1);
+				tmp = i;
+				numeroBunker2++;
+			}
 			i = i + 1;
 		}
 		else if ((valoreSuccessivo == valorePrecedente + 1) && (valoreSuccessivo >= 10)) {
@@ -41,8 +56,16 @@ using namespace std;
 				sup++;
 			}
 			valorePrecedente = valoreSuccessivo;
-			if (i % 11 == 0) head1 = creaBunkerList1(head1, i, valoreSuccessivo - 2);
-			if (i % 35 == 0) head2 = creaBunkerList2(head2, i, valoreSuccessivo - 2);
+			if ((i >= tmp + 10) && (numeroBunker1 <= 2) && (i % ((rand() % 3) + 4) == 0)) {
+				head1 = creaBunkerList1(head1, i, valoreSuccessivo - 2);
+				tmp = i;
+				numeroBunker1++;
+			}
+			if ((i >= tmp + 10) && (numeroBunker2 < 1) && (i % ((rand() % 15) + 1) == 0) && (matrice[i][valoreSuccessivo - 1] == ' ')) {
+				head2 = creaBunkerList2(head2, i, valoreSuccessivo - 2);
+				tmp = i;
+				numeroBunker2++;
+			}
 			i = i + 1;
 		}
 		else if ((valoreSuccessivo == valorePrecedente) && (valoreSuccessivo >= 10)) {
@@ -72,6 +95,7 @@ using namespace std;
 		matrice[tmp2->b2->coordinateBunker2(true)][tmp2->b2->coordinateBunker2(false)] = 'B';
 		tmp2 = tmp2->next;
 	}
+
 }
 
 
