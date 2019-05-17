@@ -164,6 +164,8 @@ void SolarSystem::spostamentoUniverso(char& moveSpaceshipUniverso) {
 	else if (GetAsyncKeyState(VK_RIGHT)) moveSpaceshipUniverso = 77;
 	else if (GetAsyncKeyState(VK_DOWN)) moveSpaceshipUniverso = 80;
 	else if (GetAsyncKeyState(0x51)) moveSpaceshipUniverso = '2';
+	else if (GetAsyncKeyState(' ')) moveSpaceshipUniverso = '2';
+
 }
 
 
@@ -262,3 +264,5 @@ void SolarSystem::solarSystemChange(int i) {
 bool SolarSystem::returnIfDestroyed() {
 	return SSystem->completed;
 }
+
+

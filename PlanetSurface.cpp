@@ -162,7 +162,7 @@ void PlanetSurface::spostamentoPlaetSurface(char& moveSpaceshipUniverso) {
 	else if (GetAsyncKeyState(VK_RIGHT)) moveSpaceshipUniverso = 77;
 	else if (GetAsyncKeyState(VK_DOWN)) moveSpaceshipUniverso = 80;
 	else if (GetAsyncKeyState(0x51)) moveSpaceshipUniverso = 'q';
-	else if (GetAsyncKeyState(0x5A)) moveSpaceshipUniverso = 'z';
+	else if (GetAsyncKeyState(' ')) moveSpaceshipUniverso = 'z';
 	else moveSpaceshipUniverso = 'w';
 }
 
@@ -300,7 +300,7 @@ void PlanetSurface::refresh(Spaceship &p, ptr_listaBunker1& head1, ptr_listaBunk
 		matrice[tmp->xBullet][tmp->yBullet] = ' ';
 		tmp->yBullet++;
 		if (matrice[tmp->xBullet][tmp->yBullet] == ' ') {
-			matrice[tmp->xBullet][tmp->yBullet] = 250;
+			matrice[tmp->xBullet][tmp->yBullet] = '.';
 		}
 		else if (matrice[tmp->xBullet][tmp->yBullet] == 'b') {
 			ptr_listaBunker1 tmp1 = head1;
@@ -426,4 +426,17 @@ ptr_listaBunker2 PlanetSurface::modificaLista2(ptr_listaBunker2 head, int x, int
 		}
 		return tmpOld;
 	}
+}
+
+
+void PlanetSurface::azzerareListeBullets(Spaceship& p, bool& b) {
+	if (b) {
+		for (int y = 0; y <= yMatrice; y++) {
+			for (int x = 0; x <= xMatrice; x++) {
+				if (matrice[x][y] == '.') matrice[x][y] = ' ';
+			}
+		}
+		p.LP = NULL;
+	}
+	b = false;
 }

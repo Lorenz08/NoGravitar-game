@@ -27,6 +27,7 @@ public:
 	ptr_listaBunker2 modificaLista2(ptr_listaBunker2 head, int x, int y);
 	ptr_listaBunker1 ritornoBunkerList1();
 	ptr_listaBunker2 ritornoBunkerList2();
+	void azzerareListeBullets(Spaceship& p, bool &b);
 };
 typedef PlanetSurface* ptr_PlanetSurface;
 

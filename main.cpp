@@ -19,23 +19,24 @@ int main() {
 	bool planetEnter = false;
 	bool pianetaDistrutto = false;
 	int numeroSS = 1;
-
-
+	bool trashBullets = true;
 
 	while (nav_SS.spaceshipIsAlive()) {
-		//if (x.returnIfDestroyed()) x.addSolarSystem(nav_SS);
 		x.setMappUniverso(nav_SS);
 		x.printMapp();
 		char n = x.interationSpaceship(nav_SS, planetEnter, numeroSS);
 		while ((planetEnter) && (nav_SS.spaceshipIsAlive())) {
+			x.pianetaCor(nav_SS, n)->azzerareListeBullets(nav_SS, trashBullets);
 			x.pianetaCor(nav_SS, n)->printMapp();
 			char m = x.pianetaCor(nav_SS, n)->interationSpaceshipPlanetSurface(nav_SS, pianetaDistrutto);
 			x.xxx(nav_SS, n, x.pianetaCor(nav_SS, n)->ritornoBunkerList1(), x.pianetaCor(nav_SS, n)->ritornoBunkerList2());
 			x.pianetaCor(nav_SS, n)->setMappPlanetSurface(nav_SS, m, planetEnter);
 			nav_SS.fuelMinus();
 		}
+		trashBullets = true;
 		x.solarSystemChange(numeroSS);
 	}
+
 	mapp.printMapp(2,1);
 	char h = '2';
 	while (h != 'n') {
