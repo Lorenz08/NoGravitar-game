@@ -20,3 +20,7 @@ int Bunker2::coordinateBunker2(bool b) {
 void Bunker2::minusLife() {
 	lifeBunker2--;
 }
+
+int Bunker2::returnLife() {
+	return lifeBunker2;
+}

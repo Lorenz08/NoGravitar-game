@@ -18,5 +18,6 @@ public:
 	Bunker2(int x, int y, int life);
 	int coordinateBunker2(bool b);
 	void minusLife();
+	int returnLife();
 };
 typedef class Bunker2* ptr_Bunker2;

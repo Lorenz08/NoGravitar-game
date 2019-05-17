@@ -5,7 +5,7 @@ using namespace std;
 
 
 
-PlanetSurface::PlanetSurface(Spaceship spaceship, ptr_listaBunker1 &head1, ptr_listaBunker2& head2){
+ PlanetSurface::PlanetSurface(Spaceship spaceship, ptr_listaBunker1 &head1, ptr_listaBunker2& head2){
 	setMapp();
 	setPlanetSurfaceParameters(spaceship.returnParameter(100), spaceship.returnParameter(10));
 	matrice[spaceship.returnParameter(3)][spaceship.returnParameter(4)] = 'Y';
@@ -41,8 +41,8 @@ PlanetSurface::PlanetSurface(Spaceship spaceship, ptr_listaBunker1 &head1, ptr_l
 				sup++;
 			}
 			valorePrecedente = valoreSuccessivo;
-			if (i % 77 == 0) head1 = creaBunkerList1(head1, i, valoreSuccessivo - 2);
-			if (i % 65 == 0) head2 = creaBunkerList2(head2, i, valoreSuccessivo - 2);
+			if (i % 11 == 0) head1 = creaBunkerList1(head1, i, valoreSuccessivo - 2);
+			if (i % 35 == 0) head2 = creaBunkerList2(head2, i, valoreSuccessivo - 2);
 			i = i + 1;
 		}
 		else if ((valoreSuccessivo == valorePrecedente) && (valoreSuccessivo >= 10)) {
@@ -57,6 +57,10 @@ PlanetSurface::PlanetSurface(Spaceship spaceship, ptr_listaBunker1 &head1, ptr_l
 			i = i + 1;
 		}
 	}
+	
+	LBunker1 = head1;
+	LBunker2 = head2;
+
 	ptr_listaBunker1 tmp1 = head1;
 	while (tmp1 != NULL) {
 		matrice[tmp1->b1->coordinateBunker1(true)][tmp1->b1->coordinateBunker1(false)] = 'b';
@@ -76,13 +80,11 @@ ptr_listaBunker1 PlanetSurface::creaBunkerList1(ptr_listaBunker1 head, int xB, i
 		head = new listaBunker1();
 		head->b1 = new Bunker1(xB, yB, 3);
 		head->next = NULL;
-		head->prev = NULL;
 	}
 	else if (head->next == NULL) {
 		head->next = new listaBunker1();
 		head->next->b1 = new Bunker1(xB, yB, 3);
 		head->next->next = NULL;
-		head->next->prev = head;
 	}
 	else {
 		ptr_listaBunker1 tmp, tmpOld;
@@ -95,7 +97,6 @@ ptr_listaBunker1 PlanetSurface::creaBunkerList1(ptr_listaBunker1 head, int xB, i
 		tmp->next = new listaBunker1();
 		tmp->next->b1 = new Bunker1(xB, yB, 3);
 		tmp->next->next = NULL;
-		tmp->next->prev = tmp;
 	}
 	return head;
 }
@@ -142,19 +143,19 @@ void PlanetSurface::spostamentoPlaetSurface(char& moveSpaceshipUniverso) {
 }
 
 
-char PlanetSurface::interationSpaceshipPlanetSurface(Spaceship &p, ptr_listaBunker1& head1, ptr_listaBunker2& head2) {
+char PlanetSurface::interationSpaceshipPlanetSurface(Spaceship &p, bool &pianetaDistrutto) {
 	char n;
 	spostamentoPlaetSurface(n);
 	if ((n == 75) && (matrice[p.returnParameter(3)][p.returnParameter(4) + 1] != '|')) {
 		if (matrice[p.returnParameter(3) - 1][p.returnParameter(4)] == ' ') p.moveSpaceshipPlanet(n);
 		else {
-			if ((matrice[p.returnParameter(3) - 1][p.returnParameter(4)] != 'C') || (matrice[p.returnParameter(3) - 1][p.returnParameter(4)] != 'c')) p.lifeMinus();
+			if (((matrice[p.returnParameter(3) - 1][p.returnParameter(4)] != 'C') || (matrice[p.returnParameter(3) - 1][p.returnParameter(4)] != 'c')) && (p.returnParameter(3) > 1)) p.lifeMinus();
 		}
 	}
 	else if ((n == 77) && (matrice[p.returnParameter(3)][p.returnParameter(4) + 1] != '|')) {
 		if (matrice[p.returnParameter(3) + 1][p.returnParameter(4)] == ' ') p.moveSpaceshipPlanet(n);
 		else {
-			if ((matrice[p.returnParameter(3) + 1][p.returnParameter(4)] != 'C') || (matrice[p.returnParameter(3) + 1][p.returnParameter(4)] != 'c')) p.lifeMinus();
+			if (((matrice[p.returnParameter(3) + 1][p.returnParameter(4)] != 'C') || (matrice[p.returnParameter(3) + 1][p.returnParameter(4)] != 'c')) && (p.returnParameter(3) < 77)) p.lifeMinus();
 		}
 	}
 	else if ((n == 72) && (matrice[p.returnParameter(3)][p.returnParameter(4) + 1] != '|')) {
@@ -171,7 +172,7 @@ char PlanetSurface::interationSpaceshipPlanetSurface(Spaceship &p, ptr_listaBunk
 	else if (n == 'z') {
 		addBullets(p);
 	}
-	refresh(p, head1, head2);
+	refresh(p, LBunker1, LBunker2, pianetaDistrutto);
 	return n;
 }
 
@@ -266,27 +267,139 @@ ptr_Bullets PlanetSurface::deleteBullets(ptr_Bullets &p) {
 }
 
 
-void PlanetSurface::refresh(Spaceship &p, ptr_listaBunker1& head1, ptr_listaBunker2& head2) {
+void PlanetSurface::refresh(Spaceship &p, ptr_listaBunker1& head1, ptr_listaBunker2& head2, bool& pianetaDistrutto) {
 	ptr_Bullets tmp = p.LP;
+	int xx = 0;
+	int yy = 0;
 
 	while (tmp != NULL) {
-		if (matrice[tmp->xBullet][tmp->yBullet] != 'Y') matrice[tmp->xBullet][tmp->yBullet] = ' ';
+		matrice[tmp->xBullet][tmp->yBullet] = ' ';
 		tmp->yBullet++;
 		if (matrice[tmp->xBullet][tmp->yBullet] == ' ') {
 			matrice[tmp->xBullet][tmp->yBullet] = 250;
 		}
 		else if (matrice[tmp->xBullet][tmp->yBullet] == 'b') {
 			ptr_listaBunker1 tmp1 = head1;
-			while ((tmp1->b1->coordinateBunker1(true) == tmp->xBullet) && (tmp1->b1->coordinateBunker1(false) == tmp->yBullet)) tmp1 = tmp1->next;
+			while ((tmp1->b1->coordinateBunker1(true) != tmp->xBullet) && (tmp1->b1->coordinateBunker1(false) != tmp->yBullet)) tmp1 = tmp1->next;
+			tmp->eliminato = true;
 			tmp1->b1->minusLife();
+			xx = tmp->xBullet;
+			yy = tmp->yBullet;
 		}
 		else if (matrice[tmp->xBullet][tmp->yBullet] == 'B') {
 			ptr_listaBunker2 tmp2 = head2;
-			while ((tmp2->b2->coordinateBunker2(true) == tmp->xBullet) && (tmp2->b2->coordinateBunker2(false) == tmp->yBullet)) tmp2 = tmp2->next;
+			while ((tmp2->b2->coordinateBunker2(true) != tmp->xBullet) && (tmp2->b2->coordinateBunker2(false) != tmp->yBullet)) tmp2 = tmp2->next;
+			tmp->eliminato = true;
 			tmp2->b2->minusLife();
+			xx = tmp->xBullet;
+			yy = tmp->yBullet;
 		}
 		else tmp->eliminato = true;
 		tmp = tmp->next;
 	}
 	p.LP = deleteBullets(p.LP);
+	head1 = modificaLista1(head1, xx, yy);
+	head2 = modificaLista2(head2, xx, yy);
+}
+
+ptr_listaBunker1 PlanetSurface::ritornoBunkerList1() {
+	return LBunker1;
+
+}
+
+ptr_listaBunker2 PlanetSurface::ritornoBunkerList2() {
+	return LBunker2;
+}
+
+ptr_listaBunker1 PlanetSurface::modificaLista1(ptr_listaBunker1 head, int x, int y) {
+	if (head == NULL) return NULL;
+	else if (head->next == NULL) {
+		if (head->b1->returnLife() < 1) {
+			ptr_listaBunker1 tmp = head;
+			matrice[x][y] = ' ';
+			delete tmp;
+			return NULL;
+		}
+		else return head;
+	}
+	else if (head->next != NULL) {
+		ptr_listaBunker1 tmpOld, tmp1, tmp2;
+		tmpOld = head;
+		tmp1 = head;
+		tmp2 = head->next;
+		while (tmp2 != NULL) {
+			if (tmp2->b1->returnLife() < 1) {
+				ptr_listaBunker1 tmp = tmp2;
+				tmp2 = tmp2->next;
+				tmp1->next = tmp2;
+				matrice[x][y] = ' ';
+				delete tmp;
+			}
+			else {
+				tmp1 = tmp2;
+				tmp2 = tmp2->next;
+			}
+		}
+		if (tmpOld->b1->returnLife() < 1) {
+			ptr_listaBunker1 tmp = tmpOld;
+			if (tmpOld->next == NULL) {
+				tmpOld = NULL;
+				matrice[x][y] = ' ';
+				delete tmp;
+			}
+			else {
+				tmpOld = tmpOld->next;
+				matrice[x][y] = ' ';
+				delete tmp;
+			}
+		}
+		return tmpOld;
+	}
+}
+
+
+ptr_listaBunker2 PlanetSurface::modificaLista2(ptr_listaBunker2 head, int x, int y) {
+	if (head == NULL) return NULL;
+	else if (head->next == NULL) {
+		if (head->b2->returnLife() < 1) {
+			ptr_listaBunker2 tmp = head;
+			matrice[x][y] = ' ';
+			delete tmp;
+			return NULL;
+		}
+		else return head;
+	}
+	else if (head->next != NULL) {
+		ptr_listaBunker2 tmpOld, tmp1, tmp2;
+		tmpOld = head;
+		tmp1 = head;
+		tmp2 = head->next;
+		while (tmp2 != NULL) {
+			if (tmp2->b2->returnLife() < 1) {
+				ptr_listaBunker2 tmp = tmp2;
+				tmp2 = tmp2->next;
+				tmp1->next = tmp2;
+				matrice[x][y] = ' ';
+				delete tmp;
+			}
+			else {
+				tmp1 = tmp2;
+				tmp2 = tmp2->next;
+			}
+		}
+		if (tmpOld->b2->returnLife() < 1) {
+			ptr_listaBunker2 tmp = tmpOld;
+			if (tmpOld->next == NULL) {
+				tmpOld = NULL;
+				matrice[x][y] = ' ';
+				delete tmp;
+			}
+			else {
+				tmpOld = tmpOld->next;
+				matrice[x][y] = ' ';
+				delete tmp;
+			}
+		}
+		return tmpOld;
+	}
 }

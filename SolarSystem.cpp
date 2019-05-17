@@ -11,7 +11,7 @@ SolarSystem::SolarSystem(Spaceship p){
 	int numberPlanets = ((rand() % 3) + 4);
 	ptr_SS tmp = new SS();
 	tmp->numberSolarSystem = 1;
-	tmp->puntatore_planet = creaListaPianeti(p, tmp->puntatore_planet, 1);
+	tmp->puntatore_planet = creaListaPianeti(p, tmp->puntatore_planet, numberPlanets);
 	tmp->completed = false;
 	tmp->next = NULL;
 	tmp->prev = NULL; 
@@ -170,23 +170,23 @@ void SolarSystem::spostamentoUniverso(char& moveSpaceshipUniverso) {
 char SolarSystem::interationSpaceship(Spaceship &p, bool& b, int& numeroSS) {
 	char n;
 	spostamentoUniverso(n);
-	if (n == 77) {
-		if (!b) {
-			if (matrice[p.returnParameter(1) + 1][p.returnParameter(2)] == ' ') p.moveSpaceshipSolarSystem(n);
-			else if (p.returnParameter(1) < 77) b = true;
-			else if ((SSystem->next != NULL) && (SSystem->completed)) {
-				numeroSS++;
-				p.modificaCoordinateInCasoDiNuovoSistemaSolare(0);
-			}
-		}
-	}
-	else if (n == 75) {
+	if (n == 75) {
 		if (!b) {
 			if (matrice[p.returnParameter(1) - 1][p.returnParameter(2)] == ' ') p.moveSpaceshipSolarSystem(n);
 			else if (p.returnParameter(1) > 1) b = true;
 			else if ((SSystem->prev != NULL) && (SSystem->prev->completed)) {
 				numeroSS--;
 				p.modificaCoordinateInCasoDiNuovoSistemaSolare(1);
+			}
+		}
+	}
+	else if (n == 77) {
+		if (!b) {
+			if (matrice[p.returnParameter(1) + 1][p.returnParameter(2)] == ' ') p.moveSpaceshipSolarSystem(n);
+			else if (p.returnParameter(1) < 77) b = true;
+			else if ((SSystem->next != NULL) && (SSystem->completed)) {
+				numeroSS++;
+				p.modificaCoordinateInCasoDiNuovoSistemaSolare(0);
 			}
 		}
 	}
@@ -221,8 +221,7 @@ ptr_PlanetSurface SolarSystem::pianetaCor(Spaceship p, char n) {
 	return tmp->planetSurface;
 }
 
-
-ptr_listaBunker1 SolarSystem::ritornaBunkerList1(Spaceship p, char n) {
+void SolarSystem::xxx(Spaceship p, char n, ptr_listaBunker1 head1, ptr_listaBunker2 head2) {
 	ptr_Planet tmp = SSystem->puntatore_planet;
 	int xPos = p.returnParameter(1);
 	int yPos = p.returnParameter(2);
@@ -233,25 +232,9 @@ ptr_listaBunker1 SolarSystem::ritornaBunkerList1(Spaceship p, char n) {
 	while ((tmp->xPlanet != xPos) || (tmp->yPlanet != yPos)) {
 		tmp = tmp->next;
 	}
-	return tmp->listBunker1;
+	tmp->listBunker1 = head1;
+	tmp->listBunker2 = head2;
 }
-
-
-ptr_listaBunker2 SolarSystem::ritornaBunkerList2(Spaceship p, char n) {
-	ptr_Planet tmp = SSystem->puntatore_planet;
-	int xPos = p.returnParameter(1);
-	int yPos = p.returnParameter(2);
-	if (n == 77) xPos++;
-	else if (n == 75) xPos--;
-	else if (n == 72) yPos--;
-	else if (n == 80) yPos++;
-	while ((tmp->xPlanet != xPos) || (tmp->yPlanet != yPos)) {
-		tmp = tmp->next;
-	}
-	return tmp->listBunker2;
-}
-
-
 
 
 void SolarSystem::solarSystemDestroyed() {
