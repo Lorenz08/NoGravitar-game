@@ -6,8 +6,6 @@ using namespace std;
 
 
 PlanetSurface::PlanetSurface(Spaceship spaceship, ptr_listaBunker1& head1, ptr_listaBunker2& head2) {
-	punt = NULL;
-
 	setMapp();
 	setPlanetSurfaceParameters(spaceship.returnParameter(100), spaceship.returnParameter(10));
 	matrice[spaceship.returnParameter(3)][spaceship.returnParameter(4)] = 'Y';
@@ -21,56 +19,97 @@ PlanetSurface::PlanetSurface(Spaceship spaceship, ptr_listaBunker1& head1, ptr_l
 
 	//setta il resto della superficie facendo dei confronti per avere uno scostamento (negativo o positivo) massimo di 1
 	int i = 1;
+	int numeroBunker1 = 0;
+	int numeroBunker2 = 0;
+	int tmp = 0;
+
 	while (i <= 77) {
 		valoreSuccessivo = (rand() % 16) + 1;
+		int sup = 0;
+
 
 		if ((valoreSuccessivo == valorePrecedente - 1) && (valoreSuccessivo >= 10)) {
 			matrice[i][valoreSuccessivo] = '/';
+			sup = valoreSuccessivo + 1;
+			while (sup < 20) {
+				matrice[i][sup] = 34;
+				sup++;
+			}
 			valorePrecedente = valoreSuccessivo;
+			if ((i >= tmp + 10) && (numeroBunker1 <= 1) && (i % ((rand() % 15) + 1) == 0)) {
+				head1 = creaBunkerList1(head1, i, valoreSuccessivo - 1);
+				tmp = i;
+				numeroBunker1++;
+			}
+			if ((i >= tmp + 10) && (numeroBunker2 < 1) && (i % ((rand() % 3) + 4) == 0) && (matrice[i][valoreSuccessivo - 1] == ' ')) {
+				head2 = creaBunkerList2(head2, i, valoreSuccessivo - 1);
+				tmp = i;
+				numeroBunker2++;
+			}
 			i = i + 1;
 		}
 		else if ((valoreSuccessivo == valorePrecedente + 1) && (valoreSuccessivo >= 10)) {
 			matrice[i][valoreSuccessivo - 1] = 92;
+			sup = valoreSuccessivo;
+			while (sup < 20) {
+				matrice[i][sup] = 34;
+				sup++;
+			}
 			valorePrecedente = valoreSuccessivo;
-			if (i % 77 == 0) head1 = creaBunkerList1(head1, i, valoreSuccessivo - 2);
-			if (i % 65 == 0) head2 = creaBunkerList2(head2, i, valoreSuccessivo - 2);
+			if ((i >= tmp + 10) && (numeroBunker1 <= 2) && (i % ((rand() % 3) + 4) == 0)) {
+				head1 = creaBunkerList1(head1, i, valoreSuccessivo - 2);
+				tmp = i;
+				numeroBunker1++;
+			}
+			if ((i >= tmp + 10) && (numeroBunker2 < 1) && (i % ((rand() % 15) + 1) == 0) && (matrice[i][valoreSuccessivo - 1] == ' ')) {
+				head2 = creaBunkerList2(head2, i, valoreSuccessivo - 2);
+				tmp = i;
+				numeroBunker2++;
+			}
 			i = i + 1;
 		}
 		else if ((valoreSuccessivo == valorePrecedente) && (valoreSuccessivo >= 10)) {
-			matrice[i][valoreSuccessivo] = 238;
+			matrice[i][valoreSuccessivo] = 34;
+			sup = valoreSuccessivo + 1;
+			while (sup < 20) {
+				matrice[i][sup] = 34;
+				sup++;
+			}
 			if ((i % 25) == 0) matrice[i][valoreSuccessivo - 1] = 'C';
 			if ((i % 10) == 0) matrice[i][valoreSuccessivo - 1] = 'c';
 			i = i + 1;
 		}
 	}
+
+	LBunker1 = head1;
+	LBunker2 = head2;
+	LBunker1->b1->setPointer(NULL);
+
 	ptr_listaBunker1 tmp1 = head1;
 	while (tmp1 != NULL) {
-		matrice[tmp1->b1->coordinateBunker1(true)][tmp1->b1->coordinateBunker1(false)] = 'B';
+		matrice[tmp1->b1->coordinateBunker1(true)][tmp1->b1->coordinateBunker1(false)] = 'b';
 		tmp1 = tmp1->next;
 	}
 
 	ptr_listaBunker2 tmp2 = head2;
 	while (tmp2 != NULL) {
-		matrice[tmp2->b2->coordinateBunker2(true)][tmp2->b2->coordinateBunker2(false)] = 'b';
+		matrice[tmp2->b2->coordinateBunker2(true)][tmp2->b2->coordinateBunker2(false)] = 'B';
 		tmp2 = tmp2->next;
 	}
+
 }
 
 
 ptr_listaBunker1 PlanetSurface::creaBunkerList1(ptr_listaBunker1 head, int xB, int yB) {
 	if (head == NULL) {
 		head = new listaBunker1();
-		head->proiettili = new listaBullets;
 		head->b1 = new Bunker1(xB, yB, 3);
 		head->next = NULL;
-		head->prev = NULL;
 	}
 	else if (head->next == NULL) {
 		head->next = new listaBunker1();
-		head->next->proiettili = new listaBullets;
 		head->next->b1 = new Bunker1(xB, yB, 3);
 		head->next->next = NULL;
-		head->next->prev = head;
 	}
 	else {
 		ptr_listaBunker1 tmp, tmpOld;
@@ -81,14 +120,9 @@ ptr_listaBunker1 PlanetSurface::creaBunkerList1(ptr_listaBunker1 head, int xB, i
 			tmpOld = tmpOld->next;
 		}
 		tmp->next = new listaBunker1();
-		tmp->next->proiettili = new listaBullets;
 		tmp->next->b1 = new Bunker1(xB, yB, 3);
 		tmp->next->next = NULL;
-		tmp->next->prev = tmp;
 	}
-	addBullets(xB, yB);
-	refresh(-1);
-
 	return head;
 }
 
@@ -122,30 +156,33 @@ ptr_listaBunker2 PlanetSurface::creaBunkerList2(ptr_listaBunker2 head, int xB, i
 	return head;
 }
 
+
 void PlanetSurface::spostamentoPlaetSurface(char& moveSpaceshipUniverso) {
 	if (GetAsyncKeyState(VK_UP)) moveSpaceshipUniverso = 72;
 	else if (GetAsyncKeyState(VK_LEFT)) moveSpaceshipUniverso = 75;
 	else if (GetAsyncKeyState(VK_RIGHT)) moveSpaceshipUniverso = 77;
 	else if (GetAsyncKeyState(VK_DOWN)) moveSpaceshipUniverso = 80;
 	else if (GetAsyncKeyState(0x51)) moveSpaceshipUniverso = 'q';
-	else if (GetAsyncKeyState(VK_SHIFT)) moveSpaceshipUniverso = 'p';
+	else if (GetAsyncKeyState(' ')) moveSpaceshipUniverso = 'z';
 	else moveSpaceshipUniverso = 'w';
-	
 }
 
-char PlanetSurface::interationSpaceshipPlanetSurface(Spaceship & p) {
+
+char PlanetSurface::interationSpaceshipPlanetSurface(Spaceship & p, bool& pianetaDistrutto) {
 	char n;
+	int c = (rand() % 8);
+
 	spostamentoPlaetSurface(n);
 	if ((n == 75) && (matrice[p.returnParameter(3)][p.returnParameter(4) + 1] != '|')) {
 		if (matrice[p.returnParameter(3) - 1][p.returnParameter(4)] == ' ') p.moveSpaceshipPlanet(n);
 		else {
-			if ((matrice[p.returnParameter(3) - 1][p.returnParameter(4)] != 'C') || (matrice[p.returnParameter(3) - 1][p.returnParameter(4)] != 'c')) p.lifeMinus();
+			if (((matrice[p.returnParameter(3) - 1][p.returnParameter(4)] != 'C') || (matrice[p.returnParameter(3) - 1][p.returnParameter(4)] != 'c')) && (p.returnParameter(3) > 1)) p.lifeMinus();
 		}
 	}
 	else if ((n == 77) && (matrice[p.returnParameter(3)][p.returnParameter(4) + 1] != '|')) {
 		if (matrice[p.returnParameter(3) + 1][p.returnParameter(4)] == ' ') p.moveSpaceshipPlanet(n);
 		else {
-			if ((matrice[p.returnParameter(3) + 1][p.returnParameter(4)] != 'C') || (matrice[p.returnParameter(3) + 1][p.returnParameter(4)] != 'c')) p.lifeMinus();
+			if (((matrice[p.returnParameter(3) + 1][p.returnParameter(4)] != 'C') || (matrice[p.returnParameter(3) + 1][p.returnParameter(4)] != 'c')) && (p.returnParameter(3) < 77)) p.lifeMinus();
 		}
 	}
 	else if ((n == 72) && (matrice[p.returnParameter(3)][p.returnParameter(4) + 1] != '|')) {
@@ -157,15 +194,15 @@ char PlanetSurface::interationSpaceshipPlanetSurface(Spaceship & p) {
 			if ((matrice[p.returnParameter(3)][p.returnParameter(4) + 1] != 'C') || (matrice[p.returnParameter(3)][p.returnParameter(4) + 1] != 'c')) p.lifeMinus();
 		}
 	}
-
 	else if (n == 'q') raggioTraenteUscente(p);
 	else if (n == 'w') raggioTraenteEntrante(p);
-	else if (n == 'p') {
-		addBullets(p.returnParameter(3), p.returnParameter(4));
-		refresh(1);
-	}
+	else if (n == 'z') addBullets(p);
 
+	//if(c <= 1)
+	addBulletsBunker(LBunker1);
 
+	refreshBunkerBullets(LBunker1,LBunker2, p, 0,-1);
+	refresh(p, LBunker1, LBunker2, pianetaDistrutto);
 	return n;
 }
 
@@ -218,56 +255,58 @@ void PlanetSurface::raggioTraenteEntrante(Spaceship p) {
 	}
 }
 
-void PlanetSurface::addBullets(int x, int y) {
-	if (punt == NULL) {
-		punt = new listaBullets;
-		punt->xCoordinate = x;
-		punt->yCoordinate = y;
-		punt->eliminato = false;
-		punt->next = NULL;
+
+void PlanetSurface::addBullets(Spaceship & p) {
+	if (p.LP == NULL) {
+		p.LP = new Bullets();
+		p.LP->xBullet = p.returnParameter(3);
+		p.LP->yBullet = p.returnParameter(4);
+		p.LP->eliminato = false;
+		p.LP->next = NULL;
 	}
 	else {
-		ptr_listaBullets tmp = punt;
+		ptr_Bullets tmp = p.LP;
 		while (tmp->next != NULL) {
 			tmp = tmp->next;
 		}
-		tmp->next = new listaBullets;
+		tmp->next = new Bullets();
 		tmp->next->eliminato = false;
 		tmp = tmp->next;
-		tmp->xCoordinate= x;
-		tmp->yCoordinate = y;
+		tmp->xBullet = p.returnParameter(3);
+		tmp->yBullet = p.returnParameter(4);
 		tmp->next = NULL;
 	}
 }
 
-ptr_listaBullets PlanetSurface::deleteBullets(ptr_listaBullets p) {
+void PlanetSurface::addBulletsBunker(ptr_listaBunker1& head1) { //PER IL MOMENTO L'HO FATTO SOLO PER QUESTO PER VEDERE SE FUNZIONAVA, PER IL BUNKER 2 E' UGUALE (PERO' SE AVESSIVO UN UNICO METODO CHE PRENDE IN INPUT UNA LISTA DI PROIETTILI POTREBBE FARE L'ADD BULLETT DI TUTTO, IN UN SOLO METODO)
+	ptr_Bullets tmp = head1->b1->returnPointer();
 
-	/*if (p != NULL) {
-		if (p->eliminato == true) {
-			ptr_listaBullets tmp = p;
-			p = p->next;
-			delete tmp;
-			return(p);
-		}
-		else if (p->next != NULL && p->next->eliminato == true) {
-			ptr_listaBullets tmp_1 = p;
-			ptr_listaBullets tmp_2 = p->next;
-			tmp_1->next = tmp_1->next->next;
-			delete tmp_2;
-			return(p);
-		}
-		else
-			return(p);
+	if (tmp == NULL) {
+		tmp = new Bullets();
+		tmp->xBullet = head1->b1->coordinateBunker1(true);
+		tmp->yBullet = head1->b1->coordinateBunker1(false);
+		tmp->eliminato = false;
+		tmp->next = NULL;
 	}
 	else {
-		return(p);
-	}*/
+		while (tmp->next != NULL) {
+			tmp = tmp->next;
+		}
+		tmp->next = new Bullets();
+		tmp->next->eliminato = false;
+		tmp = tmp->next;
+		tmp->xBullet = head1->b1->coordinateBunker1(true);
+		tmp->yBullet = head1->b1->coordinateBunker1(false);
+		tmp->next = NULL;
+	}
+}
 
+ptr_Bullets PlanetSurface::deleteBullets(ptr_Bullets & p) {
 	if (p == NULL)
 		return NULL;
 
 	else if (p->eliminato == true) {
-		ptr_listaBullets tmp = p;
+		ptr_Bullets tmp = p;
 		p = p->next;
 		delete tmp;
 		return deleteBullets(p);
@@ -279,31 +318,197 @@ ptr_listaBullets PlanetSurface::deleteBullets(ptr_listaBullets p) {
 	}
 }
 
-void PlanetSurface::refresh(int incremento) {
-	ptr_listaBullets tmp = punt;
+ptr_Bullets PlanetSurface::deleteBulletsBunker(ptr_Bullets p) {
+	if (p == NULL)
+		return NULL;
 
-	while (tmp != NULL) {
-		matrice[tmp->xCoordinate][tmp->yCoordinate] = ' ';
-		tmp->xCoordinate = tmp->xCoordinate;
-		tmp->yCoordinate = tmp->yCoordinate + incremento;
-
-		if (matrice[tmp->xCoordinate][tmp->yCoordinate] == 'b') {
-
-			matrice[tmp->xCoordinate][tmp->yCoordinate] = '.';
-		}
-
-		if (matrice[tmp->xCoordinate][tmp->yCoordinate] == ' ') {
-
-			matrice[tmp->xCoordinate][tmp->yCoordinate] = '.';
-		}
-		else 
-			tmp->eliminato = true;
-
-		tmp = tmp->next;
+	else if (p->eliminato == true) {
+		ptr_Bullets tmp = p;
+		p = p->next;
+		delete tmp;
+		return deleteBulletsBunker(p);
 	}
 
-	punt = deleteBullets(punt);
-
+	else {
+		p->next = deleteBulletsBunker(p->next);
+		return p;
+	}
 }
 
 
+void PlanetSurface::refresh(Spaceship & p, ptr_listaBunker1 & head1, ptr_listaBunker2 & head2, bool& pianetaDistrutto) {
+	ptr_Bullets tmp = p.LP;
+	int xx = 0;
+	int yy = 0;
+
+	while (tmp != NULL) {
+		matrice[tmp->xBullet][tmp->yBullet] = ' ';
+		tmp->yBullet++;
+		if (matrice[tmp->xBullet][tmp->yBullet] == ' ' || matrice[tmp->xBullet][tmp->yBullet] == '.') {
+			matrice[tmp->xBullet][tmp->yBullet] = '.';
+		}
+		else if (matrice[tmp->xBullet][tmp->yBullet] == 'b') {
+			ptr_listaBunker1 tmp1 = head1;
+			while ((tmp1->b1->coordinateBunker1(true) != tmp->xBullet) && (tmp1->b1->coordinateBunker1(false) != tmp->yBullet)) tmp1 = tmp1->next;
+			tmp->eliminato = true;
+			tmp1->b1->minusLife();
+			xx = tmp->xBullet;
+			yy = tmp->yBullet;
+		}
+		else if (matrice[tmp->xBullet][tmp->yBullet] == 'B') {
+			ptr_listaBunker2 tmp2 = head2;
+			while ((tmp2->b2->coordinateBunker2(true) != tmp->xBullet) && (tmp2->b2->coordinateBunker2(false) != tmp->yBullet)) tmp2 = tmp2->next;
+			tmp->eliminato = true;
+			tmp2->b2->minusLife();
+			xx = tmp->xBullet;
+			yy = tmp->yBullet;
+		}
+		else tmp->eliminato = true;
+		tmp = tmp->next;
+	}
+	p.LP = deleteBullets(p.LP);
+	head1 = modificaLista1(head1, xx, yy);
+	head2 = modificaLista2(head2, xx, yy);
+}
+
+void PlanetSurface::refreshBunkerBullets (ptr_listaBunker1& head1, ptr_listaBunker2& head2, Spaceship& p, int aggiungiX, int aggiungiY) {
+	ptr_Bullets tmp = head1->b1->returnPointer();
+
+	while (tmp != NULL) {
+		matrice[tmp->xBullet][tmp->yBullet] = ' ';
+		tmp->xBullet = tmp->xBullet + aggiungiX;
+		tmp->yBullet = tmp->yBullet + aggiungiY;
+
+
+		if (matrice[tmp->xBullet][tmp->yBullet] == ' ' || matrice[tmp->xBullet][tmp->yBullet] == '.'){ //NEL CASO C'è UNO SPAZIO VUOTO OPPURE UN PROIETTILE(NEL CASO DUE PROIETTILI COLLIDONO) STAMPA LO STESSO
+			matrice[tmp->xBullet][tmp->yBullet] = '.';
+		}
+		
+		else if (matrice[tmp->xBullet][tmp->yBullet] == 'Y') {
+			p.lifeMinus();
+			tmp->eliminato = true;
+		}
+		
+		else tmp->eliminato = true;
+
+		tmp = tmp->next;
+	}
+	
+	head1->b1->setPointer(deleteBulletsBunker(head1->b1->returnPointer())); //USO IL RITORNO DEL PUNTATORE DELLA LISTA DEI PROIETTILI E CON IL METODO PER SETTARLA LA SETTO DOPO AVER FATTO IL DELETE
+}
+
+
+ptr_listaBunker1 PlanetSurface::ritornoBunkerList1() {
+	return LBunker1;
+
+}
+
+ptr_listaBunker2 PlanetSurface::ritornoBunkerList2() {
+	return LBunker2;
+}
+
+ptr_listaBunker1 PlanetSurface::modificaLista1(ptr_listaBunker1 head, int x, int y) {
+	if (head == NULL) return NULL;
+	else if (head->next == NULL) {
+		if (head->b1->returnLife() < 1) {
+			ptr_listaBunker1 tmp = head;
+			matrice[x][y] = ' ';
+			delete tmp;
+			return NULL;
+		}
+		else return head;
+	}
+	else if (head->next != NULL) {
+		ptr_listaBunker1 tmpOld, tmp1, tmp2;
+		tmpOld = head;
+		tmp1 = head;
+		tmp2 = head->next;
+		while (tmp2 != NULL) {
+			if (tmp2->b1->returnLife() < 1) {
+				ptr_listaBunker1 tmp = tmp2;
+				tmp2 = tmp2->next;
+				tmp1->next = tmp2;
+				matrice[x][y] = ' ';
+				delete tmp;
+			}
+			else {
+				tmp1 = tmp2;
+				tmp2 = tmp2->next;
+			}
+		}
+		if (tmpOld->b1->returnLife() < 1) {
+			ptr_listaBunker1 tmp = tmpOld;
+			if (tmpOld->next == NULL) {
+				tmpOld = NULL;
+				matrice[x][y] = ' ';
+				delete tmp;
+			}
+			else {
+				tmpOld = tmpOld->next;
+				matrice[x][y] = ' ';
+				delete tmp;
+			}
+		}
+		return tmpOld;
+	}
+}
+
+
+ptr_listaBunker2 PlanetSurface::modificaLista2(ptr_listaBunker2 head, int x, int y) {
+	if (head == NULL) return NULL;
+	else if (head->next == NULL) {
+		if (head->b2->returnLife() < 1) {
+			ptr_listaBunker2 tmp = head;
+			matrice[x][y] = ' ';
+			delete tmp;
+			return NULL;
+		}
+		else return head;
+	}
+	else if (head->next != NULL) {
+		ptr_listaBunker2 tmpOld, tmp1, tmp2;
+		tmpOld = head;
+		tmp1 = head;
+		tmp2 = head->next;
+		while (tmp2 != NULL) {
+			if (tmp2->b2->returnLife() < 1) {
+				ptr_listaBunker2 tmp = tmp2;
+				tmp2 = tmp2->next;
+				tmp1->next = tmp2;
+				matrice[x][y] = ' ';
+				delete tmp;
+			}
+			else {
+				tmp1 = tmp2;
+				tmp2 = tmp2->next;
+			}
+		}
+		if (tmpOld->b2->returnLife() < 1) {
+			ptr_listaBunker2 tmp = tmpOld;
+			if (tmpOld->next == NULL) {
+				tmpOld = NULL;
+				matrice[x][y] = ' ';
+				delete tmp;
+			}
+			else {
+				tmpOld = tmpOld->next;
+				matrice[x][y] = ' ';
+				delete tmp;
+			}
+		}
+		return tmpOld;
+	}
+}
+
+
+void PlanetSurface::azzerareListeBullets(Spaceship & p, bool& b) {
+	if (b) {
+		for (int y = 0; y <= yMatrice; y++) {
+			for (int x = 0; x <= xMatrice; x++) {
+				if (matrice[x][y] == '.') matrice[x][y] = ' ';
+			}
+		}
+		p.LP = NULL;
+	}
+	b = false;
+}
