@@ -1,13 +1,11 @@
 #include <iostream>
 #include <conio.h>
-#include <ctime>
 #include <Windows.h>
 #include "SolarSystem.h"
 using namespace std;
 
 
 SolarSystem::SolarSystem(Spaceship p) {
-	srand((unsigned)time(0));
 	int numberPlanets = ((rand() % 3) + 4);
 	ptr_SS tmp = new SS();
 	tmp->numberSolarSystem = 1;
@@ -22,7 +20,6 @@ SolarSystem::SolarSystem(Spaceship p) {
 
 
 void SolarSystem::addSolarSystem(Spaceship p) {
-	srand((unsigned)time(0));
 	int numberPlanets = ((rand() % 3) + 4);
 	if (SSystem->next == NULL) {
 		ptr_SS tmp = new SS();
@@ -64,8 +61,9 @@ void SolarSystem::addSolarSystem(Spaceship p) {
 
 ptr_Planet SolarSystem::creaListaPianeti(Spaceship p, ptr_Planet head, int numberPlanets) {
 	for (int i = 1; i <= numberPlanets; i++) {
-		int xPlanet = ((rand() % 20) + 1);
-		int yPlanet = ((rand() % 10) + 1);
+		int xPlanet = ((rand() % 75) + 2);
+		int yPlanet = ((rand() % 16
+			) + 2);
 		if ((xPlanet == 3) && (yPlanet == 3)) {
 			xPlanet++;
 			yPlanet++;
@@ -151,16 +149,16 @@ void SolarSystem::setMappUniverso(Spaceship p) {
 	matrice[p.returnParameter(1)][p.returnParameter(2)] = 'Y';
 
 	if (SSystem->completed) {
-		matrice[90][5] = 'C';
-		matrice[91][5] = 'O';
-		matrice[92][5] = 'M';
-		matrice[93][5] = 'P';
-		matrice[94][5] = 'L';
-		matrice[95][5] = 'E';
-		matrice[96][5] = 'T';
-		matrice[97][5] = 'A';
-		matrice[98][5] = 'T';
-		matrice[99][5] = 'O';
+		matrice[85][6] = 'C';
+		matrice[86][6] = 'O';
+		matrice[87][6] = 'M';
+		matrice[88][6] = 'P';
+		matrice[89][6] = 'L';
+		matrice[90][6] = 'E';
+		matrice[91][6] = 'T';
+		matrice[92][6] = 'A';
+		matrice[93][6] = 'T';
+		matrice[94][6] = 'O';
 	}
 
 	ptr_Planet tmp = SSystem->puntatore_planet;
@@ -180,7 +178,6 @@ void SolarSystem::spostamentoUniverso(char& moveSpaceshipUniverso) {
 	else if (GetAsyncKeyState(VK_DOWN)) moveSpaceshipUniverso = 80;
 	else if (GetAsyncKeyState(0x51)) moveSpaceshipUniverso = '2';
 	else if (GetAsyncKeyState(' ')) moveSpaceshipUniverso = '2';
-
 }
 
 

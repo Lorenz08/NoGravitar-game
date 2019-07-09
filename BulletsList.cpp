@@ -5,11 +5,13 @@
 using namespace std;
 
 
-
+//setta il puntatore alla struttura "Bullet" a NULL
 BulletsList::BulletsList() {
 	listaProiettili = NULL;
 }
 
+//metodo per aggiunere un "Bullet" alla lista di bullet
+//aggiunge in coda
 void BulletsList::addBullets(int x, int y, bool b) {
 	if (listaProiettili == NULL) {
 		listaProiettili = new Bullet();
@@ -45,6 +47,8 @@ void BulletsList::addBullets(int x, int y, bool b) {
 	}
 }
 
+//metodo per eliminare un "Bullet" alla lista di bullet
+//metodo scritto in questo modo siccome l'unico "Bullet" che puo essere eliminto è quello in testa alla lista
 void BulletsList::deleteBullets() {
 	if (listaProiettili != NULL) {
 		if (listaProiettili->eliminato == true) {
@@ -62,6 +66,7 @@ void BulletsList::deleteBullets() {
 	}
 }
 
+//ritorna il puntatore alla lista di proiettili 
 ptr_Bullet BulletsList::retrunList() {
 	return listaProiettili;
 }

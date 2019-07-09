@@ -23,7 +23,7 @@ public:
 	void refreshSpaceship(Spaceship& p, ptr_listaBunker1& head1, ptr_listaBunker2& head2);
 	void refreshBunker1(Spaceship& p, ptr_listaBunker1& head1, int i);
 	void refreshBunker2(Spaceship& p, ptr_listaBunker2& head2, int i);
-	ptr_listaBunker1 modificaLista1(Spaceship& p, ptr_listaBunker1& head, int x, int y);
+	ptr_listaBunker1 modificaLista1(ptr_listaBunker1& head, int x, int y);
 	ptr_listaBunker2 modificaLista2(ptr_listaBunker2 head, int x, int y);
 	ptr_listaBunker1 ritornoBunkerList1();
 	ptr_listaBunker2 ritornoBunkerList2();
@@ -31,5 +31,6 @@ public:
 	void sparaBunker(Spaceship& p, int& i);
 	void eliminareSpariBunker1Distrutto(ptr_listaBunker1& head);
 	void eliminareSpariBunker2Distrutto(ptr_listaBunker2& head);
+	bool assenzaBunker();
 };
 typedef PlanetSurface* ptr_PlanetSurface;

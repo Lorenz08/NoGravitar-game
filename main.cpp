@@ -1,6 +1,7 @@
 #include <iostream>
 #include <conio.h>
 #include <Windows.h>
+#include <ctime>
 #include "SolarSystem.h"
 #include "Mapp.h"
 #include "PlanetSurface.h"
@@ -9,6 +10,7 @@
 using namespace std;
 
 int main() {
+	srand((unsigned)time(0));
 	Mapp mapp = Mapp(); 
 	mapp.printMapp(1,1);
 	char k = '2';

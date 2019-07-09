@@ -4,11 +4,16 @@
 #include "Mapp.h"
 using namespace std;
 
-
+//costruttore 
 Mapp::Mapp() {
 }
 
 
+//metodo per stampare
+//ogni refresh viene cancellato la schermata precedente
+//metoto strutturato per non fare vedere il cursore e evitare di far evedere il refresh, cosi da avere una scehrmata piu fissa possibile
+//vengono settati vari colori in base al carattere (che a loro volta costituiscono una componente diverse della schermata)
+//inserito uno "Sleep" per diminuire il refresh
 void Mapp::printMapp(int i, int a) {
 	if (i == 1) setInitialMapp();
 	else if (i == 2) setContinueMapp();
@@ -50,10 +55,13 @@ void Mapp::printMapp(int i, int a) {
 		}
 	}
 	WriteConsoleOutputA(wHnd, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea);
-	Sleep(100);
+	Sleep(50);
 }
 
 
+//metodo per settare la cornice della mappa (schermata), che sarà poi fissa perchè uguale in tutte le varie situazioni del gioco
+//impostato il tutto con una matrice
+//settati i vari bordi di delimitazione e al loro interno rimpito con caratteri vuoti
 void Mapp::setMapp() {
 	for (int y = 0; y <= yMatrice; y++) {
 		for (int x = 0; x <= xMatrice; x++) {
@@ -78,6 +86,9 @@ void Mapp::setMapp() {
 }
 
 
+//metodo usato per settare nella matrice generale le informazioni generali che sono sempre presenti
+//ci sono le informazioni fisse, ovvero i comandi generali (le freccie direzionali)
+//ci sono le informazioni variabili, ovvero i vari parametri del gico (carburante, vita e punteggio)
 void Mapp::setGeneralParameters(int fuel, int life, int score) {
 	int lifeDecine = (life / 10);
 	int lifeUnità = (life - (lifeDecine * 10));
@@ -206,28 +217,32 @@ void Mapp::setGeneralParameters(int fuel, int life, int score) {
 }
 
 
+//metodo per settare il numero del sistema solare (informazione presente solo nella scehrmata del sistema solare)
+//aggiunge alle informazioni generali quella del sistema solare in cui si è
 void Mapp::setSolarSystemParameters(int fuel, int life, int score, int universo) {
 	setGeneralParameters(fuel, life, score);
 
-	matrice[79][5] = 'S';
-	matrice[80][5] = 'I';
 	matrice[81][5] = 'S';
-	matrice[82][5] = 'T';
-	matrice[83][5] = 'E';
-	matrice[84][5] = 'M';
-	matrice[85][5] = 'A';
-	matrice[86][5] = ' ';
-	matrice[87][5] = 'S';
-	matrice[88][5] = 'O';
-	matrice[89][5] = 'L';
-	matrice[90][5] = 'A';
-	matrice[91][5] = 'R';
-	matrice[92][5] = 'E';
-	matrice[93][5] = ':';
-	matrice[94][5] = (char)universo + 48;
+	matrice[82][5] = 'I';
+	matrice[83][5] = 'S';
+	matrice[84][5] = 'T';
+	matrice[85][5] = 'E';
+	matrice[86][5] = 'M';
+	matrice[87][5] = 'A';
+	matrice[88][5] = ' ';
+	matrice[89][5] = 'S';
+	matrice[90][5] = 'O';
+	matrice[91][5] = 'L';
+	matrice[92][5] = 'A';
+	matrice[93][5] = 'R';
+	matrice[94][5] = 'E';
+	matrice[95][5] = ':';
+	matrice[96][5] = (char)universo + 48;
 }
 
 
+//metodo per settare le informazioni relative ai comandi di gioco all'interno del pianeta (come sparare e attivare il raggio traente)
+//aggiunge alle informazioni generali i comandi all'interno del pianeta
 void Mapp::setPlanetSurfaceParameters(int fuel, int life, int score) {
 	setGeneralParameters(fuel, life, score);
 
@@ -269,6 +284,7 @@ void Mapp::setPlanetSurfaceParameters(int fuel, int life, int score) {
 }
 
 
+//metodo per impstare la scehrmata iniziale, la schermata con le informazioni di inizio gioco
 void Mapp::setInitialMapp() {
 	for (int y = 0; y <= yMatrice; y++) {
 		for (int x = 0; x <= xMatrice; x++) {
@@ -320,7 +336,7 @@ void Mapp::setInitialMapp() {
 
 
 
-
+//metodo per impostare la schermata di fine gioco 
 void Mapp::setFinalMapp() {
 	for (int y = 0; y <= yMatrice; y++) {
 		for (int x = 0; x <= xMatrice; x++) {
@@ -348,6 +364,9 @@ void Mapp::setFinalMapp() {
 	matrice[53][9] = 'R';
 }
 
+
+//metodo per impostare la schermata una volta che si è finita la vita
+//propone due scelte: quella di terminare il gioco oppure quella di ricominciarlo da capo
 void Mapp::setContinueMapp() {
 	setFinalMapp();
 
@@ -398,7 +417,8 @@ void Mapp::setContinueMapp() {
 }
 
 
-void Mapp::ShowConsoleCursor(bool showFlag) {  //funzione per non fare vedere il cursore
+//metodo per non mostrare il cursore nella schermata
+void Mapp::ShowConsoleCursor(bool showFlag) {  
 	HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_CURSOR_INFO     cursorInfo;
 	GetConsoleCursorInfo(out, &cursorInfo);

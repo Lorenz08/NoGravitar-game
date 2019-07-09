@@ -12,8 +12,8 @@ Spaceship::Spaceship() {
 	p2 = 3;
 	p3 = 3;
 	p4 = 3;
-	life = 60;
-	fuel = 1000;
+	life = 10;
+	fuel = 1500;
 	score = 0;
 	LP = new BulletsList();
 }
