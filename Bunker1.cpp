@@ -5,6 +5,7 @@ using namespace std;
 
 
 //assegna i valori all'oggetto Bunker1
+//crea un’oggetto di tipo BulletsList da cui poi si potranno aggiunger i Bullet e permettere al bunker di sparare (sia sx che dx)
 Bunker1::Bunker1(int x, int y, int life) {
 	xBunker1 = x;
 	yBunker1 = y;
@@ -47,7 +48,7 @@ void Bunker1::deleteBulletSBunker1() {
 }
 
 
-//metodo utilizzato per eliminare tutti i "Bullet" presenti nelle due liste (viene ustao quando si esce dal pianeta)
+//metodo utilizzato per eliminare tutti i "Bullet" presenti nelle due liste (viene usato quando si esce dal pianeta)
 //siccome il metodo deleteBullets() elimina solo i bullet in testa alla lista, viene ripetuto in un ciclo while finche la lista non si svuota
 //viene eseguito il ciclo per ciascuna delle tre liste bullet del Bunker1
 //prima un ciclo per assegnare a tutti i Bunker1 il valore true al campo "eliminato", e uno successivo per eliminarli dalla lista

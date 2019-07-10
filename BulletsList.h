@@ -2,10 +2,10 @@
 
 
 struct Bullet {
-	int xBullet;
-	int yBullet;
-	bool eliminato;  //ci serve per vedere se eliminarlo o meno
-	Bullet* next;
+	int xBullet;      //coordinata x del proiettile
+	int yBullet;      //coordinata y del proiettile
+	bool eliminato;   //ci serve per vedere se eliminarlo o meno
+	Bullet* next;     //puntatore al proiettile successivo
 };
 typedef Bullet* ptr_Bullet;
 

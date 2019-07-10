@@ -36,12 +36,12 @@ void Mapp::printMapp(int i, int a) {
 		for (int x = 0; x < WIDTH; ++x) {
 			consoleBuffer[x + WIDTH * y].Char.AsciiChar = (unsigned char)matrice[x][y];
 			if (a == 0) {
-				if ((matrice[x][y] == 'Y') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_RED;
+				if (((matrice[x][y] == 'Y') || (matrice[x][y] == ':')) && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_RED;
 				else if ((matrice[x][y] == 'O') && (x < 78)) {
 					if (i != 1) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_GREEN;
 					else  consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN;
 				}
-				else if (((matrice[x][y] == '/') || (matrice[x][y] == 92) || (matrice[x][y] == ':') || (matrice[x][y] == 34)) && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_GREEN;
+				else if (((matrice[x][y] == '/') || (matrice[x][y] == 92) || (matrice[x][y] == 34)) && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_GREEN;
 				else if ((matrice[x][y] == 'X') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = FOREGROUND_BLUE;
 				else if ((matrice[x][y] == 'C') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = 14;
 				else if ((matrice[x][y] == 'c') && (x < 78)) consoleBuffer[x + WIDTH * y].Attributes = 14;
@@ -88,7 +88,7 @@ void Mapp::setMapp() {
 
 //metodo usato per settare nella matrice generale le informazioni generali che sono sempre presenti
 //ci sono le informazioni fisse, ovvero i comandi generali (le freccie direzionali)
-//ci sono le informazioni variabili, ovvero i vari parametri del gico (carburante, vita e punteggio)
+//ci sono le informazioni variabili, ovvero i vari parametri del gioco (carburante, vita e punteggio)
 void Mapp::setGeneralParameters(int fuel, int life, int score) {
 	int lifeDecine = (life / 10);
 	int lifeUnità = (life - (lifeDecine * 10));
@@ -217,7 +217,7 @@ void Mapp::setGeneralParameters(int fuel, int life, int score) {
 }
 
 
-//metodo per settare il numero del sistema solare (informazione presente solo nella scehrmata del sistema solare)
+//metodo per settare il numero del sistema solare (informazione presente solo nella schermata del sistema solare)
 //aggiunge alle informazioni generali quella del sistema solare in cui si è
 void Mapp::setSolarSystemParameters(int fuel, int life, int score, int universo) {
 	setGeneralParameters(fuel, life, score);
@@ -284,7 +284,7 @@ void Mapp::setPlanetSurfaceParameters(int fuel, int life, int score) {
 }
 
 
-//metodo per impstare la scehrmata iniziale, la schermata con le informazioni di inizio gioco
+//metodo per impostare la schermata iniziale, la schermata con le informazioni di inizio gioco
 void Mapp::setInitialMapp() {
 	for (int y = 0; y <= yMatrice; y++) {
 		for (int x = 0; x <= xMatrice; x++) {

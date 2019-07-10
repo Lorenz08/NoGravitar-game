@@ -5,14 +5,14 @@
 
 class Spaceship : public Mapp {
 protected:
-	int p1;  	//coordinate x della navicella nell'universo
-	int p2;  	//coordinate y della navicella nell'universo
-	int p3;     //coordinate x della navicella all'interno del pianeta
-	int p4;     //coordinate x della navicella all'interno del pianeta
-	int life;	//vita della navicella
-	int fuel; 	//carburante della navicella
-	int score;
-	ptr_BulletsList LP;
+	int p1;              //coordinate x della navicella nell'universo
+	int p2;              //coordinate y della navicella nell'universo
+	int p3;              //coordinate x della navicella all'interno del pianeta
+	int p4;              //coordinate x della navicella all'interno del pianeta
+	int life;	         //vita della navicella
+	int fuel; 	         //carburante della navicella
+	int score;           //punteggio della navicella 
+	ptr_BulletsList LP;  //puntatore alla lista di proiettili 
 public:
 	Spaceship();
 	void moveSpaceshipSolarSystem(char n);
