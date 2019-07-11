@@ -205,11 +205,11 @@ void PlanetSurface::spostamentoPlaetSurface(char& moveSpaceshipUniverso) {
 char PlanetSurface::interationSpaceshipPlanetSurface(Spaceship & p, bool& pianetaDistrutto) {
 	char n;
 	spostamentoPlaetSurface(n);
-	
+
 	//left
 	if ((n == 75) && (matrice[p.returnParameter(3)][p.returnParameter(4) + 1] != '|')) {   //controllo raggio traente attivo
 		//se il carattere a sinstra è vuoto allora si puo usare il metodo con cui si aggiornano i campi della navicella
-		if (matrice[p.returnParameter(3) - 1][p.returnParameter(4)] == ' ') p.moveSpaceshipPlanet(n); 
+		if (matrice[p.returnParameter(3) - 1][p.returnParameter(4)] == ' ') p.moveSpaceshipPlanet(n);
 		else {
 			//se il carattere a sinistra non è vuoto allora viene tolta una vita alla navicella (eccetto che non si tratti di del bordo)
 			if (p.returnParameter(3) > 1) p.lifeMinus();
@@ -248,10 +248,10 @@ char PlanetSurface::interationSpaceshipPlanetSurface(Spaceship & p, bool& pianet
 //setta i vari caratteri della matrice del pianeta
 void PlanetSurface::setMappPlanetSurface(Spaceship & p, char n, bool& uscitaPianeta) {
 	setPlanetSurfaceParameters(p.returnParameter(100), p.returnParameter(10), p.returnParameter(200)); //informazioni generali
-	
-    //setta la posizione della navicella 
-	matrice[p.returnParameter(3)][p.returnParameter(4)] = 'Y';   
-	
+
+	//setta la posizione della navicella 
+	matrice[p.returnParameter(3)][p.returnParameter(4)] = 'Y';
+
 	//cancellano la posizione vecchia della navicella
 	if (matrice[p.returnParameter(3) + 1][p.returnParameter(4)] == 'Y') matrice[p.returnParameter(3) + 1][p.returnParameter(4)] = ' ';
 	if (matrice[p.returnParameter(3) - 1][p.returnParameter(4)] == 'Y') matrice[p.returnParameter(3) - 1][p.returnParameter(4)] = ' ';
@@ -340,7 +340,7 @@ void PlanetSurface::refreshBunker1(Spaceship & p, ptr_listaBunker1 & head1, int 
 	//serve per aggiornare la posizione dei proettili sia come coordinate sia graficamente nella schermata
 	while (tmp1 != NULL) {
 		ptr_Bullet tmpSx = tmp1->b1->returnLP(1)->retrunList();
-		while (tmpSx != NULL) { 
+		while (tmpSx != NULL) {
 			tmpSx->xBullet--;   //direzione della lista sinistra di proiettili 
 			tmpSx->yBullet--;   //direzione della lista sinistra di proiettili
 			//setta graficamente la posizione del nuovo proiettile e cancella quella vecchia
@@ -364,6 +364,7 @@ void PlanetSurface::refreshBunker1(Spaceship & p, ptr_listaBunker1 & head1, int 
 			//se la posizione del proiettile corrisponde alla posizione della naviella, viene tolta una vita alla navicella
 			if (matrice[tmpSx->xBullet][tmpSx->yBullet] == 'Y') {
 				p.lifeMinus();
+				tmpSx->eliminato = true;
 				if (matrice[tmpSx->xBullet + 1][tmpSx->yBullet + 1] != 'b') matrice[tmpSx->xBullet + 1][tmpSx->yBullet + 1] = ' ';
 			}
 			//se la posizione del proiettile corrisponde aall'angolo alto/dx, gli viene assegnato il valore true (cosi poi da cancellarlo)
@@ -396,6 +397,7 @@ void PlanetSurface::refreshBunker1(Spaceship & p, ptr_listaBunker1 & head1, int 
 			}
 			if (matrice[tmpDx->xBullet][tmpDx->yBullet] == 'Y') {
 				p.lifeMinus();
+				tmpDx->eliminato = true;
 				if (matrice[tmpDx->xBullet - 1][tmpDx->yBullet + 1] != 'b') matrice[tmpDx->xBullet - 1][tmpDx->yBullet + 1] = ' ';
 			}
 			if ((tmpDx->xBullet == 78) && (tmpDx->yBullet == 0)) {
@@ -447,6 +449,7 @@ void PlanetSurface::refreshBunker2(Spaceship & p, ptr_listaBunker2 & head2, int 
 			}
 			if (matrice[tmpSx->xBullet][tmpSx->yBullet] == 'Y') {
 				p.lifeMinus();
+				tmpSx->eliminato = true;
 				if (matrice[tmpSx->xBullet + 1][tmpSx->yBullet + 1] != 'B') matrice[tmpSx->xBullet + 1][tmpSx->yBullet + 1] = ' ';
 			}
 			if ((tmpSx->xBullet == 0) && (tmpSx->yBullet == 0)) {
@@ -468,6 +471,7 @@ void PlanetSurface::refreshBunker2(Spaceship & p, ptr_listaBunker2 & head2, int 
 			}
 			else if (matrice[tmpCentrale->xBullet][tmpCentrale->yBullet] == 'Y') {
 				p.lifeMinus();
+				tmpCentrale->eliminato = true;
 				if (matrice[tmpCentrale->xBullet][tmpCentrale->yBullet] == 'Y')
 					if ((matrice[tmpCentrale->xBullet][tmpCentrale->yBullet + 1] != '|') && (matrice[tmpCentrale->xBullet][tmpCentrale->yBullet + 1] != 'B')) matrice[tmpCentrale->xBullet][tmpCentrale->yBullet + 1] = ' ';
 			}
@@ -493,6 +497,7 @@ void PlanetSurface::refreshBunker2(Spaceship & p, ptr_listaBunker2 & head2, int 
 			}
 			if (matrice[tmpDx->xBullet][tmpDx->yBullet] == 'Y') {
 				p.lifeMinus();
+				tmpDx->eliminato = true;
 				if (matrice[tmpDx->xBullet - 1][tmpDx->yBullet + 1] != 'B') matrice[tmpDx->xBullet - 1][tmpDx->yBullet + 1] = ' ';
 			}
 			if ((tmpDx->xBullet == 78) && (tmpDx->yBullet == 0)) {
@@ -513,7 +518,7 @@ void PlanetSurface::refreshBunker2(Spaceship & p, ptr_listaBunker2 & head2, int 
 
 //metodo per aggiungere ed eliminare i proittili alla lista di proiettili della navicella
 //utilizzato anche per aggiornare ad ogni ciclo la posizione di ciascun poriettile e di settarne correttamente la posizione sulla schermata
-void PlanetSurface::refreshSpaceship(Spaceship& p, ptr_listaBunker1 & head1, ptr_listaBunker2 & head2) {
+void PlanetSurface::refreshSpaceship(Spaceship & p, ptr_listaBunker1 & head1, ptr_listaBunker2 & head2) {
 	ptr_Bullet tmp = p.returnLP()->retrunList();
 	int xx = 0;
 	int yy = 0;
@@ -522,9 +527,9 @@ void PlanetSurface::refreshSpaceship(Spaceship& p, ptr_listaBunker1 & head1, ptr
 	while (tmp != NULL) {
 		matrice[tmp->xBullet][tmp->yBullet] = ' '; //cancella la posizione vecchia
 		tmp->yBullet++;             //modifica le coordinate
-		
+
 		//setta la nuova posizione nella schermata se incontra un carattere vuoto
-		if ((matrice[tmp->xBullet][tmp->yBullet] == ' ') || (matrice[tmp->xBullet][tmp->yBullet] == '.')) { 
+		if ((matrice[tmp->xBullet][tmp->yBullet] == ' ') || (matrice[tmp->xBullet][tmp->yBullet] == '.')) {
 			matrice[tmp->xBullet][tmp->yBullet] = ':';
 		}
 
@@ -551,13 +556,13 @@ void PlanetSurface::refreshSpaceship(Spaceship& p, ptr_listaBunker1 & head1, ptr
 
 		//se incontra un carattere che rappresente la superfice o il carburante viene semplicemente impostato "eliminato" a true
 		else tmp->eliminato = true;
-		
+
 		tmp = tmp->next;
 	}
 	p.deleteBulletSPaceship(); //elimina i proiettili dalla lista di proiettili della navicella
 	head1 = modificaLista1(p, head1, xx, yy);    //modfica la lista di Buker1 nel caso ci venga distrutto un bunker
 	head2 = modificaLista2(p, head2, xx, yy);    //modfica la lista di Buker2 nel caso ci venga distrutto un bunker
-	
+
 	//un ulteriore controllo per vedere se un pianeta è stato completato (non ci sono piu bunker)
 	if (assenzaBunker()) {  //booleano che restituisce true se non sono piu presenti nella scehrmata caratteri che rappresentano dei bunker
 		while (head1 != NULL) {
@@ -593,7 +598,7 @@ bool PlanetSurface::assenzaBunker() {
 
 
 //controlla tutta la lista di Bunker1 e se trova un bunker con le vite azzerate compie diverse azioni
-ptr_listaBunker1 PlanetSurface::modificaLista1(Spaceship& p, ptr_listaBunker1& head, int x, int y) {
+ptr_listaBunker1 PlanetSurface::modificaLista1(Spaceship & p, ptr_listaBunker1 & head, int x, int y) {
 	if (head == NULL) return NULL;
 	else if (head->b1->returnLife() < 1) {
 		p.setScore(1);   //aggiorna il punteggio della navicella
@@ -611,7 +616,7 @@ ptr_listaBunker1 PlanetSurface::modificaLista1(Spaceship& p, ptr_listaBunker1& h
 
 
 //stesso ragionamento di modificaLista1, ma con i Bunker2
-ptr_listaBunker2 PlanetSurface::modificaLista2(Spaceship& p, ptr_listaBunker2& head, int x, int y) {
+ptr_listaBunker2 PlanetSurface::modificaLista2(Spaceship & p, ptr_listaBunker2 & head, int x, int y) {
 	if (head == NULL) return NULL;
 	else if (head->b2->returnLife() < 1) {
 		p.setScore(2);
@@ -685,7 +690,7 @@ void PlanetSurface::azzerareListeBullets(Spaceship & p, bool& b) {
 	if (b) {
 		for (int y = 0; y <= yMatrice; y++) {
 			for (int x = 0; x <= xMatrice; x++) {
-				if (matrice[x][y] == '.') matrice[x][y] = ' ';
+				if ((matrice[x][y] == '.')|| (matrice[x][y] == ':')) matrice[x][y] = ' ';
 			}
 		}
 		p.deleteAllBulletsSpaceship();
