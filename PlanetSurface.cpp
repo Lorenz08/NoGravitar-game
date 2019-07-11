@@ -351,12 +351,12 @@ void PlanetSurface::refreshBunker1(Spaceship & p, ptr_listaBunker1 & head1, int 
 					if (matrice[tmpSx->xBullet + 1][tmpSx->yBullet + 1] != 'b') matrice[tmpSx->xBullet + 1][tmpSx->yBullet + 1] = ' ';
 				}
 			}
-			//se la coordinata y del proiettile raggionge il bordo superiore, allora gli viene assegnato il valore true (cosi poi da cancellarlo)
+			//se la coordinata y del proiettile raggiunge il bordo superiore, allora gli viene assegnato il valore true (cosi poi da cancellarlo)
 			if (tmpSx->yBullet <= 0) {
 				matrice[tmpSx->xBullet + 1][tmpSx->yBullet + 1] = ' ';
 				tmpSx->eliminato = true;
 			}
-			//se la coordinata x del proiettile raggionge il bordo sinistro, allora gli viene assegnato il valore true (cosi poi da cancellarlo)
+			//se la coordinata x del proiettile raggiunge il bordo sinistro, allora gli viene assegnato il valore true (cosi poi da cancellarlo)
 			if (tmpSx->xBullet <= 0) {
 				matrice[tmpSx->xBullet + 1][tmpSx->yBullet + 1] = ' ';
 				tmpSx->eliminato = true;
@@ -364,7 +364,6 @@ void PlanetSurface::refreshBunker1(Spaceship & p, ptr_listaBunker1 & head1, int 
 			//se la posizione del proiettile corrisponde alla posizione della naviella, viene tolta una vita alla navicella
 			if (matrice[tmpSx->xBullet][tmpSx->yBullet] == 'Y') {
 				p.lifeMinus();
-				tmpSx->eliminato = true;
 				if (matrice[tmpSx->xBullet + 1][tmpSx->yBullet + 1] != 'b') matrice[tmpSx->xBullet + 1][tmpSx->yBullet + 1] = ' ';
 			}
 			//se la posizione del proiettile corrisponde aall'angolo alto/dx, gli viene assegnato il valore true (cosi poi da cancellarlo)
@@ -397,7 +396,6 @@ void PlanetSurface::refreshBunker1(Spaceship & p, ptr_listaBunker1 & head1, int 
 			}
 			if (matrice[tmpDx->xBullet][tmpDx->yBullet] == 'Y') {
 				p.lifeMinus();
-				tmpDx->eliminato = true;
 				if (matrice[tmpDx->xBullet - 1][tmpDx->yBullet + 1] != 'b') matrice[tmpDx->xBullet - 1][tmpDx->yBullet + 1] = ' ';
 			}
 			if ((tmpDx->xBullet == 78) && (tmpDx->yBullet == 0)) {
@@ -449,7 +447,6 @@ void PlanetSurface::refreshBunker2(Spaceship & p, ptr_listaBunker2 & head2, int 
 			}
 			if (matrice[tmpSx->xBullet][tmpSx->yBullet] == 'Y') {
 				p.lifeMinus();
-				tmpSx->eliminato = true;
 				if (matrice[tmpSx->xBullet + 1][tmpSx->yBullet + 1] != 'B') matrice[tmpSx->xBullet + 1][tmpSx->yBullet + 1] = ' ';
 			}
 			if ((tmpSx->xBullet == 0) && (tmpSx->yBullet == 0)) {
@@ -471,7 +468,6 @@ void PlanetSurface::refreshBunker2(Spaceship & p, ptr_listaBunker2 & head2, int 
 			}
 			else if (matrice[tmpCentrale->xBullet][tmpCentrale->yBullet] == 'Y') {
 				p.lifeMinus();
-				tmpCentrale->eliminato = true;
 				if (matrice[tmpCentrale->xBullet][tmpCentrale->yBullet] == 'Y')
 					if ((matrice[tmpCentrale->xBullet][tmpCentrale->yBullet + 1] != '|') && (matrice[tmpCentrale->xBullet][tmpCentrale->yBullet + 1] != 'B')) matrice[tmpCentrale->xBullet][tmpCentrale->yBullet + 1] = ' ';
 			}
@@ -497,7 +493,6 @@ void PlanetSurface::refreshBunker2(Spaceship & p, ptr_listaBunker2 & head2, int 
 			}
 			if (matrice[tmpDx->xBullet][tmpDx->yBullet] == 'Y') {
 				p.lifeMinus();
-				tmpDx->eliminato = true;
 				if (matrice[tmpDx->xBullet - 1][tmpDx->yBullet + 1] != 'B') matrice[tmpDx->xBullet - 1][tmpDx->yBullet + 1] = ' ';
 			}
 			if ((tmpDx->xBullet == 78) && (tmpDx->yBullet == 0)) {
